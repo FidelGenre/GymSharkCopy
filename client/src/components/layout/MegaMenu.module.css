@@ -1,0 +1,140 @@
+/* --- DESKTOP MENU --- */
+.megaMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid #eee;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  padding: 40px 0;
+  z-index: 999;
+}
+
+.container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.columnsWrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 80px;
+  width: 100%;
+}
+
+.columnTitle {
+  font-size: 13px;
+  font-weight: 950;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  color: #000;
+}
+
+/* Lista Desktop sin puntos */
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link {
+  display: block;
+  padding: 6px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #767676;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #000;
+}
+
+/* --- MÓVIL (SIDEBAR A LA IZQUIERDA) --- */
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Oscurece el fondo */
+  z-index: 5000;
+  display: flex;
+}
+
+.mobileSidebar {
+  width: 85%;
+  max-width: 350px;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out; /* Animación desde la izquierda */
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.mobileHeader {
+  padding: 20px;
+  display: flex;
+  justify-content: flex-start; /* Alinea la X a la izquierda */
+  border-bottom: 1px solid #eee;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.mobileCategoryGroup {
+  margin-bottom: 30px;
+}
+
+.mobileCatTitle {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid black;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+/* Lista Móvil sin puntos */
+.mobileList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  text-decoration: none;
+  color: #000;
+  font-weight: 700;
+  font-size: 14px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.mobileLink:active {
+  background-color: #f9f9f9;
+}

@@ -1,0 +1,29 @@
+# --- Configuración Específica ---
+src/main/resources/application.properties
+
+# Compilación y Build (Maven)
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.restoreBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs (IntelliJ / Eclipse / VS Code)
+.idea/
+*.iml
+*.iws
+.settings/
+.classpath
+.project
+.factorypath
+.vscode/
+
+# Logs y Temporales
+logs/
+*.log
+temp/

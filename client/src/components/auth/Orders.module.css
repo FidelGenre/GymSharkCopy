@@ -1,0 +1,153 @@
+.container {
+  padding: 80px 5%;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 70vh;
+}
+
+.pageTitle {
+  font-weight: 900;
+  font-size: 28px;
+  margin-bottom: 50px;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.orderCard {
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.cardHeader {
+  background: #f6f6f6;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.orderLabel {
+  font-size: 10px;
+  font-weight: 800;
+  color: #767676;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.orderId {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.orderStatus {
+  background: #000;
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+/* Colores de estado opcionales si tu backend los envía */
+.completado { background: #000; }
+.pendiente { background: #767676; }
+
+.cardBody {
+  padding: 25px;
+}
+
+.orderMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #545454;
+  margin-bottom: 20px;
+}
+
+.productList {
+  margin-bottom: 25px;
+}
+
+.productItem {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #111;
+}
+
+.footerRow {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.orderTotal {
+  text-align: right;
+}
+
+.totalLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #767676;
+  margin-bottom: 4px;
+}
+
+.totalAmount {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.centered {
+  padding: 150px 20px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.emptyContainer {
+  text-align: center;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: #767676;
+}
+
+.empty {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.shopBtn {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 15px 40px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}

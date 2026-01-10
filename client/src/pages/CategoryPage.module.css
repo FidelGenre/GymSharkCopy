@@ -1,0 +1,108 @@
+.pageContainer {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 130px 4% 80px; /* Margen superior para no quedar bajo la Navbar fija */
+}
+
+.breadcrumb {
+  font-size: 11px;
+  font-weight: 700;
+  color: #707070;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 25px;
+  margin-bottom: 35px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 950;
+  letter-spacing: -1px;
+}
+
+.count {
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
+}
+
+.content {
+  display: flex;
+  gap: 60px;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.filterGroup h4 {
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  letter-spacing: 1.2px;
+}
+
+.filterGroup ul {
+  list-style: none;
+  padding: 0;
+}
+
+.filterGroup li {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #444;
+  transition: color 0.2s;
+}
+
+.activeFilter {
+  color: #000 !important;
+  text-decoration: underline;
+}
+
+.filterGroup li:hover { color: #000; }
+
+.productGrid {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 35px 20px;
+}
+
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 120px 0;
+  font-weight: 900;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.noProducts {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 100px 40px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.noProducts p {
+  font-weight: 700;
+  color: #666;
+  font-size: 15px;
+}
+
+@media (max-width: 1024px) {
+  .sidebar { display: none; } /* En móviles la barra lateral se oculta */
+  .pageContainer { padding-top: 100px; }
+}

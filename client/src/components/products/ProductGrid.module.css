@@ -1,0 +1,45 @@
+.container {
+  width: 100%;
+  max-width: 100%; /* Para que ocupe todo el ancho disponible */
+  padding: 20px 40px; /* Margen lateral similar a Gymshark */
+  box-sizing: border-box;
+}
+
+.grid {
+  display: grid;
+  /* Configuración de 4 columnas iguales */
+  grid-template-columns: repeat(4, 1fr);
+  /* Espaciado entre las cards */
+  column-gap: 15px;
+  row-gap: 40px;
+}
+
+.cardWrapper {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cardWrapper:hover {
+  /* Efecto sutil al pasar el mouse */
+  transform: translateY(-4px);
+}
+
+/* --- RESPONSIVIDAD --- */
+
+/* Tablets: Mostrar 2 columnas */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+  }
+  .container {
+    padding: 20px;
+  }
+}
+
+/* Móviles: Mostrar 1 columna */
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

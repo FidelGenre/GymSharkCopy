@@ -1,0 +1,32 @@
+.App {
+  width: 100%;
+}
+
+.sectionContainer {
+  width: 100%;
+  background-color: #fff;
+  padding-bottom: 80px;
+}
+
+.titleWrapper {
+  padding: 60px 40px 20px 40px;
+}
+
+.mainTitle {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: #000;
+  margin: 0;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+  .titleWrapper {
+    padding: 40px 20px 10px 20px;
+  }
+  .mainTitle {
+    font-size: 20px;
+  }
+}

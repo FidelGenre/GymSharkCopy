@@ -1,0 +1,289 @@
+/* --- ESTILOS GENERALES --- */
+.homeWrapper { 
+    background-color: #fff; 
+    overflow-x: hidden;
+}
+
+/* --- SECCIÓN HERO PRINCIPAL --- */
+.hero {
+    width: 100%;
+    height: 85vh;
+    background-image: url('/image.avif'); /* Asegúrate de que la ruta sea correcta */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
+    display: flex;
+    align-items: flex-end;
+    padding: 60px 4%;
+}
+
+.content {
+    max-width: 800px;
+}
+
+.tagline {
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.title {
+    font-size: 64px;
+    font-weight: 950;
+    color: white;
+    line-height: 1;
+    margin: 10px 0 30px;
+    text-transform: uppercase;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+.primaryBtn {
+    padding: 16px 32px;
+    background: white;
+    color: black;
+    border: none;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 13px;
+    transition: opacity 0.2s ease;
+}
+
+.primaryBtn:hover {
+    opacity: 0.9;
+}
+
+/* --- ESTILOS DE SECCIÓN --- */
+.section { 
+    padding: 60px 4%; 
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 25px;
+}
+
+.sectionTitle { 
+    font-size: 24px; 
+    font-weight: 950; 
+    margin: 0; 
+    text-transform: uppercase; 
+}
+
+.viewAll { 
+    font-size: 14px; 
+    font-weight: 700; 
+    color: black; 
+    text-decoration: underline; 
+    margin-left: 20px; 
+}
+
+/* --- SLIDERS (CORREGIDO PARA 4 POR FILA) --- */
+.slider {
+    display: flex; 
+    gap: 15px; 
+    overflow-x: auto; 
+    scroll-behavior: smooth; 
+    padding-bottom: 20px;
+    scroll-snap-type: x mandatory;
+}
+
+.slider::-webkit-scrollbar { 
+    display: none; 
+}
+
+.sliderItem { 
+    /* Cálculo: (100% / 4 productos) - (proporción del gap) */
+    flex: 0 0 calc(25% - 11.25px); 
+    scroll-snap-align: start;
+}
+
+.controls { 
+    display: flex; 
+    gap: 10px; 
+}
+
+.controlBtn {
+    width: 36px; 
+    height: 36px; 
+    border-radius: 50%; 
+    border: none;
+    background: #f5f5f5; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.controlBtn:hover {
+    background: #e5e5e5;
+}
+
+/* --- CATEGORY BANNERS (POPULAR RIGHT NOW) --- */
+.categoryBannerGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.popularCategoryCard {
+    text-decoration: none;
+    color: black;
+    display: block;
+    overflow: hidden;
+}
+
+.catImgBox {
+    aspect-ratio: 4/5;
+    background: #f5f5f5;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.catImgBox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.popularCategoryCard:hover .catImgBox img {
+    transform: scale(1.05);
+}
+
+.catName {
+    font-weight: 900;
+    font-size: 16px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.catLink {
+    font-size: 12px;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+/* --- DUAL SHOP BANNERS (MUJER/HOMBRE) --- */
+.dualBannerGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 40px 4%;
+}
+
+.largeShopCard {
+    position: relative;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.largeShopCard img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.largeShopCard:hover img {
+    transform: scale(1.03);
+}
+
+.shopLabel {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    background: white;
+    color: black;
+    padding: 14px 28px;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 13px;
+    border-radius: 2px;
+}
+
+/* --- TABS --- */
+.filterTabs { display: flex; gap: 10px; margin: 0 0 30px; }
+.tab, .activeTab {
+    padding: 8px 20px; border-radius: 20px; font-weight: 800; font-size: 12px; border: none; cursor: pointer;
+}
+.activeTab { background: black; color: white; }
+.tab { background: #f5f5f5; color: black; }
+
+/* --- GRIDS (TRAINING / GUIDES) --- */
+.trainingGrid, .guideGrid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 15px; 
+}
+
+.imgBox, .guideImgBox { 
+    aspect-ratio: 4/5; 
+    background: #f6f6f6; 
+    overflow: hidden; 
+}
+
+.imgBox img, .guideImgBox img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.5s ease; 
+}
+
+.imgBox:hover img, .guideImgBox:hover img { 
+    transform: scale(1.03); 
+}
+
+.actName { 
+    font-weight: 950; 
+    margin-top: 15px; 
+    border-bottom: 2px solid black; 
+    display: inline-block; 
+    font-size: 14px; 
+    text-transform: uppercase;
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+
+/* Tablets Grandes */
+@media (max-width: 1024px) {
+    .trainingGrid, .guideGrid { grid-template-columns: repeat(2, 1fr); }
+    .sliderItem { flex: 0 0 calc(50% - 10px); } /* 2 cards en tablets */
+    .title { font-size: 48px; }
+}
+
+/* Tablets / Móvil Horizontal */
+@media (max-width: 900px) {
+    .categoryBannerGrid { grid-template-columns: 1fr 1fr; }
+    .dualBannerGrid { grid-template-columns: 1fr; }
+    .hero { height: 70vh; }
+}
+
+/* Móviles */
+@media (max-width: 600px) {
+    .sliderItem { flex: 0 0 85%; } /* Una card casi completa y un poco de la siguiente */
+    .categoryBannerGrid { grid-template-columns: 1fr 1fr; }
+    .title { font-size: 36px; }
+    .overlay { padding: 40px 20px; }
+    .primaryBtn { width: 100%; margin-bottom: 10px; }
+    .actions { flex-direction: column; }
+}

@@ -1,0 +1,199 @@
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1000;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #eeeeee;
+  background-color: white;
+}
+
+.topRow {
+  height: 80px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navLeft {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.menuBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: #000;
+}
+
+.desktopNav {
+  display: flex;
+  gap: 20px;
+}
+
+.navLink {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 30px 0;
+  color: #000;
+}
+
+.logo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.logoImage {
+  height: 24px;
+  width: auto;
+  display: block;
+}
+
+.navRight {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1;
+}
+
+.iconBtn, .cartBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.userSessionLink {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+}
+
+/* Estilo para el círculo del usuario logueado */
+.userIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.userIconWrapper:hover {
+  background: #ebebeb;
+}
+
+.cartBtn {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #000;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(20%, -20%);
+}
+
+.mobileSearchRow {
+  display: none;
+  padding: 0 20px 15px;
+}
+
+.searchBarMock {
+  width: 100%;
+  height: 45px;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  color: #767676;
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  .topRow {
+    height: 60px;
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  .navLeft {
+    display: flex;
+    justify-content: flex-start;
+    flex: none;
+  }
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    flex: none;
+    margin-right: 15px; 
+  }
+
+  .navRight {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    flex: none;
+  }
+
+  .desktopNav, .desktopOnly {
+    display: none;
+  }
+
+  .menuBtn {
+    display: block;
+  }
+
+  .mobileSearchRow {
+    display: block;
+    padding: 0 15px 15px;
+  }
+
+  .logoImage {
+    height: 18px;
+  }
+
+  .userIconWrapper {
+    background: transparent;
+    padding: 8px;
+  }
+}
