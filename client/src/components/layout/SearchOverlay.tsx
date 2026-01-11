@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Search, X } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './SearchOverlay.module.css';
 import type { Product } from '../../types/products';
@@ -10,7 +10,6 @@ interface Props { isOpen: boolean; onClose: () => void; }
 
 const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredResults, setFilteredResults] = useState<Product[]>([]);
@@ -19,10 +18,9 @@ const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
     if (isOpen) {
       inputRef.current?.focus();
       document.body.style.overflow = 'hidden';
-      // Carga desde Spring Boot
       axios.get('http://localhost:8080/api/products')
         .then(res => setAllProducts(res.data))
-        .catch(err => console.error("Error cargando productos:", err));
+        .catch(err => console.error("Error:", err));
     } else {
       document.body.style.overflow = 'unset';
       setSearchTerm('');
@@ -37,15 +35,14 @@ const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
       return; 
     }
     
-    // SEPARACIÓN POR PALABRAS CLAVE: Permite buscar "short f" y encontrar "Shorts Focus"
     const keywords = term.split(' ').filter(word => word.length > 0);
 
     const results = allProducts.filter(p => {
       const name = p.name.toLowerCase();
       const category = (p.category || '').toLowerCase();
-      const subCategory = (p.subCategory || '').toLowerCase();
+      // Usamos as any temporalmente hasta que actualices la interfaz Product
+      const subCategory = ((p as any).subCategory || '').toLowerCase();
 
-      // El producto debe contener TODAS las palabras escritas en el buscador
       return keywords.every(key => 
         name.includes(key) || 
         category.includes(key) || 
@@ -56,7 +53,6 @@ const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
     setFilteredResults(results.slice(0, 6));
   }, [searchTerm, allProducts]);
 
-  // LÓGICA DE IMAGEN: Sincronizada con List<String> images de tu Backend Java
   const getProductImage = (product: any) => {
     const rawPath = (product.images && product.images.length > 0) 
       ? product.images[0] 
@@ -65,7 +61,6 @@ const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
     if (!rawPath) return '/imagegym.webp';
     if (rawPath.startsWith('http')) return rawPath;
     
-    // Forzamos "/" inicial para evitar errores de red y cargar desde public/
     const cleanPath = rawPath.trim();
     return cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
   };
@@ -102,7 +97,6 @@ const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
                   alt={product.name} 
                   className={styles.resultImg}
                   onError={(e) => {
-                    // Fallback si la ruta local no existe
                     (e.target as HTMLImageElement).src = '/imagegym.webp';
                   }}
                 />
@@ -110,7 +104,6 @@ const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
                   <p className={styles.resultName}>{product.name}</p>
                   <p className={styles.resultCategory}>{product.category}</p>
                 </div>
-                {/* Formato de moneda para Argentina: $ 45.000 */}
                 <p className={styles.resultPrice}>{formatARS(product.price)}</p>
               </Link>
             ))}

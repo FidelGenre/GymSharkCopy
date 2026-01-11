@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
+import React from 'react';
+import type { ReactNode , createContext, useContext, useState, useEffect,} from 'react'; // El "type" es la clave
 // Actualizamos la interfaz para incluir ID y Apellido
 interface User {
   id: number;        // Esencial para que el Profile busque los pedidos en el backend

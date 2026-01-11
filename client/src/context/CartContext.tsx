@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React from 'react';
+import type { ReactNode , createContext, useContext, useState,} from 'react'; // El "type" es la clave
 import type { Product } from '../types/products';
 
 /**

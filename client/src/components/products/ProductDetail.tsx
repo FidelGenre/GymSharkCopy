@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './ProductDetail.module.css';
 import { useCart } from '../../context/CartContext';
-import { formatARS } from '../../utils/formatCurrency'; // Utility para $ 103.999
+import { formatARS } from '../../utils/formatCurrency'; 
 import type { Product } from '../../types/products';
 import clsx from 'clsx';
 import { X } from 'lucide-react';
@@ -38,16 +38,15 @@ const ProductDetail: React.FC = () => {
   if (loading) return <div className={styles.loader}>Cargando prenda oficial...</div>;
   if (!product) return <div className={styles.loader}>Producto no encontrado.</div>;
 
-  // --- LÓGICA DE IMÁGENES CORREGIDA (Evita net::ERR_NAME_NOT_RESOLVED) ---
+  // --- LÓGICA DE IMÁGENES CORREGIDA ---
   const getDisplayImage = (img: string | undefined) => {
     if (!img) return '/imagegym.webp';
     if (img.startsWith('http')) return img;
-    // Asegura que la ruta empiece con / para que el navegador no se pierda
     return img.startsWith('/') ? img : `/${img}`;
   };
 
-  // --- PROCESAMIENTO DE DATOS ---
-  const subCat = (product.subCategory || '').trim().toUpperCase();
+  // --- PROCESAMIENTO DE DATOS (Cast a any para evitar error de TS en subCategory) ---
+  const subCat = ((product as any).subCategory || '').trim().toUpperCase();
   const genero = (product.category || 'MUJER').toUpperCase() as 'MUJER' | 'HOMBRE';
 
   const esBra = subCat === 'BRASIER';
@@ -65,7 +64,7 @@ const ProductDetail: React.FC = () => {
   };
 
   // --- MATRICES DE GUÍA DE TALLES ---
-  const braData = {
+  const braData: any = {
     CM: {
       headers: ['79-82', '84-87', '89-92', '94-97', '99-102', '104-107'],
       rows: [
@@ -87,7 +86,7 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-  const inferiorData = {
+  const inferiorData: any = {
     MUJER: {
       CM: [{ s: 'XS', w: '75', l: '82' }, { s: 'S', w: '80', l: '82' }, { s: 'M', w: '85', l: '82' }, { s: 'L', w: '90', l: '82' }, { s: 'XL', w: '95', l: '82' }, { s: 'XXL', w: '100', l: '82' }],
       IN: [{ s: 'XS', w: '29.5', l: '32' }, { s: 'S', w: '31.5', l: '32' }, { s: 'M', w: '33.5', l: '32' }, { s: 'L', w: '35.5', l: '32' }, { s: 'XL', w: '37.5', l: '32' }, { s: 'XXL', w: '39.5', l: '32' }]
@@ -98,7 +97,7 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-  const superiorData = {
+  const superiorData: any = {
     MUJER: {
       CM: [{ s: 'XS', b: '78-83', w: '62-67' }, { s: 'S', b: '83-88', w: '67-72' }, { s: 'M', b: '88-93', w: '72-77' }, { s: 'L', b: '93-98', w: '77-82' }, { s: 'XL', b: '98-103', w: '82-87' }, { s: 'XXL', b: '103-108', w: '87-92' }],
       IN: [{ s: 'XS', b: '30-32', w: '24-26' }, { s: 'S', b: '33-35', w: '26-28' }, { s: 'M', b: '35-37', w: '28-30' }, { s: 'L', b: '37-39', w: '30-32' }, { s: 'XL', b: '39-41', w: '32-34' }, { s: 'XXL', b: '41-43', w: '34-36' }]
@@ -114,17 +113,19 @@ const ProductDetail: React.FC = () => {
       <button onClick={() => navigate(-1)} className={styles.backBtn}>← VOLVER A LA TIENDA</button>
 
       <div className={styles.content}>
-        {/* GALERÍA */}
+        {/* GALERÍA CORREGIDA */}
         <div className={styles.galleryWrapper}>
           <div className={styles.thumbnailList}>
-            {(product.images || [product.image]).map((img: string, i: number) => (
-              <button 
-                key={i} 
-                className={clsx(styles.thumbBtn, i === selectedImageIndex && styles.activeThumb)} 
-                onClick={() => setSelectedImageIndex(i)}
-              >
-                <img src={getDisplayImage(img)} alt="thumb" />
-              </button>
+            {(product.images || [product.image] || []).map((img, i) => (
+              img && (
+                <button 
+                  key={i} 
+                  className={clsx(styles.thumbBtn, i === selectedImageIndex && styles.activeThumb)} 
+                  onClick={() => setSelectedImageIndex(i)}
+                >
+                  <img src={getDisplayImage(img)} alt="thumb" />
+                </button>
+              )
             ))}
           </div>
           <div className={styles.mainImageContainer}>
@@ -139,10 +140,8 @@ const ProductDetail: React.FC = () => {
 
         {/* INFORMACIÓN */}
         <div className={styles.infoSection}>
-          <p className={styles.categoryTag}>{product.category} | {product.subCategory}</p>
+          <p className={styles.categoryTag}>{product.category} | {(product as any).subCategory}</p>
           <h1 className={styles.title}>{product.name}</h1>
-          
-          {/* Precio formateado para Argentina: $ 103.999 */}
           <p className={styles.price}>{formatARS(product.price)}</p>
 
           <div className={styles.sizeSelector}>
@@ -163,10 +162,7 @@ const ProductDetail: React.FC = () => {
             </div>
           </div>
           
-          <button 
-            className={styles.addBtn} 
-            onClick={handleAddToBag}
-          >
+          <button className={styles.addBtn} onClick={handleAddToBag}>
             AÑADIR A LA BOLSA
           </button>
         </div>
@@ -191,14 +187,14 @@ const ProductDetail: React.FC = () => {
                   <thead>
                     <tr>
                       <th className={styles.emptyCell}>BAJO BUSTO</th>
-                      {braData[unit].headers.map(h => <th key={h}>{h}</th>)}
+                      {braData[unit].headers.map((h: string) => <th key={h}>{h}</th>)}
                     </tr>
                   </thead>
                   <tbody>
-                    {braData[unit].rows.map((row, i) => (
+                    {braData[unit].rows.map((row: any, i: number) => (
                       <tr key={i}>
                         <td className={styles.underbustCol}>{row.label}</td>
-                        {row.sizes.map((s, j) => <td key={j}>{s}</td>)}
+                        {row.sizes.map((s: string, j: number) => <td key={j}>{s}</td>)}
                       </tr>
                     ))}
                   </tbody>
