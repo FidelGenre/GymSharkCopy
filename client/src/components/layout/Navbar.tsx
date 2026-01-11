@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, ShoppingBag, LogOut, Package, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, User, ShoppingBag, Menu, X } from 'lucide-react'; // Eliminados LogOut y Package
 import styles from './Navbar.module.css';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -10,9 +10,9 @@ import MegaMenu from './MegaMenu';
 const logoUrl = '/gymsharklogo.avif';
 
 const Navbar: React.FC = () => {
-  const navigate = useNavigate();
+  // Eliminado useNavigate ya que no se utilizaba en el componente
   const { setIsDrawerOpen, totalItems } = useCart();
-  const { user, logout } = useAuth();
+  const { user } = useAuth(); // Eliminado logout ya que no se utilizaba aquí
   
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<'MUJER' | 'HOMBRE' | null>(null);
@@ -68,7 +68,7 @@ const Navbar: React.FC = () => {
               
               <div className={styles.authSection}>
                 {user ? (
-                  /* ENLACE AL PERFIL (Solo con ícono) */
+                  /* ENLACE AL PERFIL */
                   <Link to="/profile" className={styles.userSessionLink}>
                     <div className={styles.userIconWrapper}>
                       <User size={22} strokeWidth={1.5} />
@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
           <div className={styles.mobileSearchRow}>
             <button className={styles.searchBarMock} onClick={() => setIsSearchOpen(true)}>
               <Search size={18} className={styles.searchIcon} />
-              <span>What are you looking for today?</span>
+              <span>¿Qué estás buscando hoy?</span>
             </button>
           </div>
         </nav>

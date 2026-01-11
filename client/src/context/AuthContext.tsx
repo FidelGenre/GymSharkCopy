@@ -1,5 +1,7 @@
-import React from 'react';
-import type { ReactNode , createContext, useContext, useState, useEffect,} from 'react'; // El "type" es la clave
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import type { ReactNode } from 'react'; // ReactNode sí es solo un tipo
+
+// El resto del código sigue igual...
 // Actualizamos la interfaz para incluir ID y Apellido
 interface User {
   id: number;        // Esencial para que el Profile busque los pedidos en el backend
