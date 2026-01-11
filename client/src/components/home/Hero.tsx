@@ -17,15 +17,15 @@ const Hero: React.FC = () => {
 
   const shuffle = (array: Product[]) => [...array].sort(() => 0.5 - Math.random());
 
-  // Carga de datos desde el backend (PostgreSQL/Spring Boot)
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/products');
+        // Tip: En producción, usa una variable de entorno para la URL de la API
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/products';
+        const response = await axios.get(apiUrl);
         const data: Product[] = response.data;
         setAllProducts(data);
         
-        // Filtro inicial por defecto (MUJER)
         const initialFiltered = data.filter(p => p.category === 'MUJER');
         setNewStyles(shuffle(initialFiltered).slice(0, 12));
         setMoreProducts(shuffle(initialFiltered).slice(0, 12));
@@ -36,7 +36,6 @@ const Hero: React.FC = () => {
     fetchHomeData();
   }, []);
 
-  // Cambia el género y actualiza los sliders
   const handleGenderSwitch = (gender: 'MUJER' | 'HOMBRE') => {
     setActiveGender(gender);
     const filtered = allProducts.filter(p => p.category === gender);
@@ -47,23 +46,26 @@ const Hero: React.FC = () => {
   const getCategories = () => {
     if (activeGender === 'MUJER') {
       return [
-        { id: 'BRASIER', name: 'TOPS DEPORTIVOS', img: './brascard.avif' },
-        { id: 'LEGGINS', name: 'LEGGINGS', img: './legginscard.avif' },
-        { id: 'SHORTS', name: 'SHORTS', img: './shortscard.avif' },
-        { id: 'SUDADERA', name: 'SUDADERAS', img: './sudaderascard.avif' }
+        { id: 'BRASIER', name: 'TOPS DEPORTIVOS', img: '/brascard.avif' },
+        { id: 'LEGGINS', name: 'LEGGINGS', img: '/legginscard.avif' },
+        { id: 'SHORTS', name: 'SHORTS', img: '/shortscard.avif' },
+        { id: 'SUDADERA', name: 'SUDADERAS', img: '/sudaderascard.avif' }
       ];
     } else {
       return [
-        { id: 'REMERAS', name: 'REMERAS', img: './remerascard.avif' },
-        { id: 'SHORTS', name: 'SHORTS', img: './shortscardhombre.avif' },
-        { id: 'JOGGERS', name: 'JOGGERS', img: './joggermancard.avif' },
-        { id: 'SUDADERAS', name: 'SUDADERAS', img: 'sudaderashombrecard.avif' }
+        { id: 'REMERAS', name: 'REMERAS', img: '/remerascard.avif' },
+        { id: 'SHORTS', name: 'SHORTS', img: '/shortscardhombre.avif' },
+        { id: 'JOGGERS', name: 'JOGGERS', img: '/joggermancard.avif' },
+        { id: 'SUDADERAS', name: 'SUDADERAS', img: '/sudaderashombrecard.avif' }
       ];
     }
   };
 
-  // Función de scroll que mueve exactamente el ancho de los 4 productos vistos
-  const scroll = (ref: React.RefObject<HTMLDivElement>, direction: 'left' | 'right') => {
+  /**
+   * FIX TS2345: Ajustamos el tipo del parámetro 'ref' para aceptar 'null' 
+   * y así coincidir con la inicialización de useRef(null).
+   */
+  const scroll = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
     if (ref.current) {
       const { scrollLeft, clientWidth } = ref.current;
       const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
@@ -92,7 +94,7 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 2: BRAND NEW STYLES (MUESTRA 4 CARDS) */}
+      {/* SECCIÓN 2: BRAND NEW STYLES */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>BRAND NEW STYLES - {activeGender}</h2>
@@ -136,17 +138,17 @@ const Hero: React.FC = () => {
       <section className={styles.shopSection}>
         <div className={styles.dualBannerGrid}>
           <div className={styles.largeShopCard}>
-            <img src="./womanimage.avif" alt="Shop Women" />
+            <img src="/womanimage.avif" alt="Shop Women" />
             <Link to="/category/MUJER/VER-TODO" className={styles.shopLabel}>SHOP WOMEN</Link>
           </div>
           <div className={styles.largeShopCard}>
-            <img src="./menimage.avif" alt="Shop Men" />
+            <img src="/menimage.avif" alt="Shop Men" />
             <Link to="/category/HOMBRE/VER-TODO" className={styles.shopLabel}>SHOP MEN</Link>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 5: WAIT THERE'S MORE (MUESTRA 4 CARDS) */}
+      {/* SECCIÓN 5: WAIT THERE'S MORE */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>WAIT THERE'S MORE...</h2>

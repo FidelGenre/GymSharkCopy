@@ -3,7 +3,7 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Lock, ChevronDown, X, Info } from 'lucide-react';
+import { Lock, ChevronDown, Info } from 'lucide-react';
 import { formatARS } from '../../utils/formatCurrency';
 import styles from './Checkout.module.css';
 

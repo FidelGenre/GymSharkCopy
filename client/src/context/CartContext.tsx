@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import type { ReactNode } from 'react'; // ReactNode sí es solo un tipo
 // El resto del código sigue igual...
 import type { Product } from '../types/products';

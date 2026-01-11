@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import styles from './Orders.module.css';
-import { Package, Tag, Clock, ShoppingBag } from 'lucide-react';
+import { Package, Tag, Clock } from 'lucide-react';
 
 const Orders: React.FC = () => {
   const { user } = useAuth();
