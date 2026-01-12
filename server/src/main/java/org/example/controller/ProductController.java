@@ -2,7 +2,6 @@ package org.example.controller;
 
 import org.example.model.Product;
 import org.example.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +9,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "http://localhost:5173")
+// CORS eliminado: Se gestiona globalmente en WebConfig para permitir gymshark.com.ar
 public class ProductController {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    // Inyección por constructor (Best Practice)
+    public ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @GetMapping
     public List<Product> getProducts(
@@ -22,23 +25,30 @@ public class ProductController {
             @RequestParam(name = "subCategory", required = false) String subCategory,
             @RequestParam(name = "search", required = false) String search) {
         
-        // 1. Buscador de la Navbar
-        if (search != null && !search.isEmpty()) {
-            return productRepository.findByNameContainingIgnoreCase(search);
+        try {
+            // 1. Buscador de la Navbar (prioridad alta)
+            if (search != null && !search.isEmpty()) {
+                return productRepository.findByNameContainingIgnoreCase(search);
+            }
+            
+            // 2. Lógica para "VER TODO"
+            // Si el frontend envía "VER TODO", mostramos todos los productos de ese género
+            if (category != null && (subCategory == null || subCategory.equalsIgnoreCase("VER TODO"))) {
+                return productRepository.findByCategoryIgnoreCase(category);
+            }
+            
+            // 3. Filtro específico (ej: HOMBRE + REMERAS)
+            if (category != null && subCategory != null) {
+                return productRepository.findByCategoryIgnoreCaseAndSubCategoryIgnoreCase(category, subCategory);
+            }
+            
+            // 4. Si no hay filtros, devolvemos todo (Home page o fallback)
+            return productRepository.findAll();
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Para ver errores en los logs de Render si algo falla en la DB
+            return List.of(); // Devolvemos lista vacía en vez de romper la app
         }
-        
-        // 2. Lógica para "VER TODO"
-        // Si el usuario pide "VER TODO", ignoramos la subcategoría y mostramos todo el género
-        if (category != null && (subCategory == null || subCategory.equalsIgnoreCase("VER TODO"))) {
-            return productRepository.findByCategoryIgnoreCase(category);
-        }
-        
-        // 3. Filtro específico (ej: HOMBRE + REMERAS)
-        if (category != null && subCategory != null) {
-            return productRepository.findByCategoryIgnoreCaseAndSubCategoryIgnoreCase(category, subCategory);
-        }
-        
-        return productRepository.findAll();
     }
 
     @GetMapping("/{id}")

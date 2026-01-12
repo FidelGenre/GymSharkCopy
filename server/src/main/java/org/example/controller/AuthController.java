@@ -2,7 +2,6 @@ package org.example.controller;
 
 import org.example.model.User;
 import org.example.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,32 +9,36 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+// El CORS ahora se maneja globalmente en WebConfig para admitir gymshark.com.ar
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    // Inyección por constructor: más seguro y limpio que @Autowired en campos
+    public AuthController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
-     * Registra un nuevo usuario. Utilizado tanto en la página de registro
-     * como de forma automática en el Checkout para invitados.
+     * Registra un nuevo usuario. 
+     * Verificado para evitar duplicados en la base de datos de producción.
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
-            // Verificamos si el email ya está registrado para evitar duplicados en PostgreSQL
+            // Verificamos si el email ya existe en PostgreSQL
             if (userRepository.findByEmail(user.getEmail()) != null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("El email ya está en uso.");
             }
 
-            // Cifrar la contraseña antes de guardar por seguridad
+            // Ciframos la contraseña antes de persistir
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User savedUser = userRepository.save(user);
             
-            // Retornamos el usuario creado incluyendo su ID generado
+            // Limpiamos la contraseña antes de enviarla al frontend por seguridad
+            savedUser.setPassword(null);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -44,14 +47,14 @@ public class AuthController {
     }
 
     /**
-     * Valida las credenciales y devuelve el objeto User para el AuthContext.
+     * Valida las credenciales y devuelve el objeto User para el AuthContext de React.
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail());
         
         if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            // Limpiamos el password antes de enviarlo al frontend por seguridad
+            // Nunca enviamos la contraseña (aunque esté cifrada) al cliente
             user.setPassword(null);
             return ResponseEntity.ok(user);
         }
