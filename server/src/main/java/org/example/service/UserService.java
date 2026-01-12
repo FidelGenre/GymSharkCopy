@@ -7,7 +7,6 @@ import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,11 +17,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Actualizar datos del perfil
     public User updateUser(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")); // Podrías usar una excepción personalizada
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Lógica de actualización parcial
         if (request.getFirstName() != null && !request.getFirstName().isEmpty()) {
             user.setFirstName(request.getFirstName());
         }
@@ -36,6 +35,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // Cambiar contraseña
     public void changePassword(Long id, PasswordChangeRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -45,7 +45,7 @@ public class UserService {
             throw new RuntimeException("La contraseña actual es incorrecta");
         }
 
-        // Guardar nueva
+        // Guardar nueva encriptada
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
