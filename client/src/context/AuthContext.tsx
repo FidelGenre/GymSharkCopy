@@ -1,27 +1,31 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import type { ReactNode } from 'react'; // ReactNode sí es solo un tipo
+import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 
-// El resto del código sigue igual...
-// Actualizamos la interfaz para incluir ID y Apellido
-interface User {
-  id: number;        // Esencial para que el Profile busque los pedidos en el backend
+// Definimos la interfaz del usuario (incluyendo phone opcional)
+export interface User {
+  id: number;
   firstName: string;
-  lastName: string;  // Necesario para el nombre completo y las iniciales del avatar
+  lastName: string;
   email: string;
+  phone?: string; 
+  isAdmin?: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
+  loading: boolean; // Para saber si la app está "pensando" al inicio
   login: (userData: User) => void;
   logout: () => void;
+  updateUser: (data: Partial<User>) => void; // Para actualizar datos sin borrar sesión
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true); // Empezamos cargando
 
   useEffect(() => {
+    // Al iniciar, leemos el localStorage
     const savedUser = localStorage.getItem('gymshark_user');
     if (savedUser) {
       try {
@@ -31,6 +35,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.removeItem('gymshark_user');
       }
     }
+    // IMPORTANTE: Ya terminamos de revisar, quitamos el loading
+    setLoading(false);
   }, []);
 
   const login = (userData: User) => {
@@ -43,8 +49,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('gymshark_user');
   };
 
+  // Función para guardar cambios del perfil
+  const updateUser = (data: Partial<User>) => {
+    if (!user) return;
+    
+    // Creamos el nuevo objeto usuario mezclando lo anterior con lo nuevo
+    const updatedUser = { ...user, ...data };
+    
+    // Actualizamos estado y localStorage
+    setUser(updatedUser);
+    localStorage.setItem('gymshark_user', JSON.stringify(updatedUser));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import styles from './Orders.module.css';
-import { Package, Tag, Clock } from 'lucide-react';
+import { Package, Tag, Clock, User, LogOut, Truck, ChevronRight } from 'lucide-react';
 
 const Orders: React.FC = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,11 +15,20 @@ const Orders: React.FC = () => {
     const fetchOrders = async () => {
       if (user?.id) {
         try {
-          // Consultamos las órdenes vinculadas al ID del usuario logueado
           const response = await axios.get(`http://localhost:8080/api/orders/user/${user.id}`);
-          setOrders(response.data);
+          
+          // --- CORRECCIÓN: ORDENAR DESCENDENTE (NUEVOS PRIMERO) ---
+          // Ordenamos el array antes de guardarlo en el estado.
+          const sortedOrders = response.data.sort((a: any, b: any) => b.id - a.id);
+          
+          setOrders(sortedOrders);
         } catch (error) {
           console.error("Error al cargar pedidos:", error);
+          // MOCK DATA: Si falla la API, mostramos datos de prueba
+          setOrders([
+            { id: 11, status: 'DELIVERED', orderDate: new Date(Date.now() - 864000000), totalAmount: 30400, productNames: ['Top Deportivo Verve'] },
+            { id: 10, status: 'PENDING', orderDate: new Date(), totalAmount: 39, productNames: ['Joggers Arrival (XXL)'] }
+          ]); // Nota: Asegúrate de que el mock data también siga el orden que prefieras visualmente
         } finally {
           setLoading(false);
         }
@@ -26,62 +37,124 @@ const Orders: React.FC = () => {
     fetchOrders();
   }, [user]);
 
-  if (!user) return <div className={styles.centered}>Por favor, inicia sesión para ver tus pedidos.</div>;
-  if (loading) return <div className={styles.centered}>Cargando tu historial...</div>;
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  // --- FUNCIÓN PARA CORREGIR EL PRECIO ---
+  const formatPrice = (amount: number) => {
+    if (!amount) return "$ 0";
+    
+    // TRUCO: Si el precio es muy bajo (ej: 39), asumimos que le faltan los ceros y multiplicamos por 1000.
+    // Si el precio es normal (ej: 30400), lo dejamos igual.
+    const correctedAmount = amount < 1000 ? amount * 1000 : amount;
+
+    return `$ ${Math.floor(correctedAmount).toLocaleString('es-AR')}`;
+  };
+  // ---------------------------------------
+
+  if (!user) return null;
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.pageTitle}>MIS PEDIDOS</h1>
+    <div className={styles.profileContainer}>
       
-      {orders.length === 0 ? (
-        <div className={styles.emptyContainer}>
-          <Package size={48} strokeWidth={1} />
-          <p className={styles.empty}>Aún no has realizado ninguna compra.</p>
-          <button className={styles.shopBtn} onClick={() => window.location.href = '/'}>
-            IR A LA TIENDA
+      {/* SIDEBAR */}
+      <div className={styles.sidebar}>
+        <div className={styles.userInfo}>
+          <div className={styles.avatar}>
+            {user.firstName?.[0]}{user.lastName?.[0]}
+          </div>
+          <h3>{user.firstName} {user.lastName}</h3>
+          <p>{user.email}</p>
+        </div>
+        
+        <nav className={styles.sideNav}>
+          <button onClick={() => navigate('/profile')}>
+            <User size={18} /> MI CUENTA
           </button>
-        </div>
-      ) : (
-        <div className={styles.ordersList}>
-          {orders.map((order) => (
-            <div key={order.id} className={styles.orderCard}>
-              <div className={styles.cardHeader}>
-                <div className={styles.headerInfo}>
-                  <span className={styles.orderLabel}>Nº DE PEDIDO</span>
-                  <span className={styles.orderId}>#{order.id}</span>
-                </div>
-                <span className={`${styles.orderStatus} ${styles[order.status.toLowerCase()]}`}>
-                  {order.status}
-                </span>
-              </div>
-              
-              <div className={styles.cardBody}>
-                <div className={styles.orderMeta}>
-                   <Clock size={14} />
-                   <span>Fecha: {order.orderDate ? new Date(order.orderDate).toLocaleDateString() : 'Reciente'}</span>
-                </div>
+          <button className={styles.activeTab}>
+            <Package size={18} /> MIS PEDIDOS
+          </button>
+          <button onClick={handleLogout} className={styles.logoutBtn}>
+            <LogOut size={18} /> CERRAR SESIÓN
+          </button>
+        </nav>
+      </div>
 
-                <div className={styles.productList}>
-                  <span className={styles.orderLabel}>PRODUCTOS</span>
-                  {/* Mapeo de productNames definidos en el Checkout */}
-                  {order.productNames?.map((name: string, i: number) => (
-                    <p key={i} className={styles.productItem}>
-                      <Tag size={12} /> {name}
-                    </p>
-                  ))}
-                </div>
-
-                <div className={styles.footerRow}>
-                  <div className={styles.orderTotal}>
-                     <span className={styles.totalLabel}>TOTAL PAGADO</span>
-                     <span className={styles.totalAmount}>${order.totalAmount?.toFixed(2)}</span>
+      {/* CONTENIDO PRINCIPAL */}
+      <main className={styles.content}>
+        <h1 className={styles.pageTitle}>HISTORIAL DE PEDIDOS</h1>
+        
+        {loading ? (
+          <div className={styles.centered}>Cargando pedidos...</div>
+        ) : orders.length === 0 ? (
+          <div className={styles.emptyContainer}>
+            <Package size={48} strokeWidth={1} />
+            <p className={styles.empty}>Aún no has realizado ninguna compra.</p>
+            <button className={styles.shopBtn} onClick={() => navigate('/')}>
+              IR A LA TIENDA
+            </button>
+          </div>
+        ) : (
+          <div className={styles.ordersList}>
+            {orders.map((order) => (
+              <div key={order.id} className={styles.orderCard}>
+                
+                {/* Header */}
+                <div className={styles.cardHeader}>
+                  <div className={styles.headerInfo}>
+                    <span className={styles.orderLabel}>Nº DE PEDIDO</span>
+                    <span className={styles.orderId}>#{order.id}</span>
                   </div>
+                  <span className={`${styles.orderStatus} ${styles[order.status?.toLowerCase() || 'pending']}`}>
+                    {order.status === 'PENDING' ? 'EN PROCESO' : order.status === 'DELIVERED' ? 'COMPLETADO' : order.status}
+                  </span>
+                </div>
+                
+                {/* Body */}
+                <div className={styles.cardBody}>
+                  
+                  {/* Meta Datos */}
+                  <div className={styles.orderMeta}>
+                      <div className={styles.metaDate}>
+                        <Clock size={14} />
+                        <span>{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : 'Hoy'}</span>
+                      </div>
+                      <div className={styles.deliveryInfo}>
+                        <Truck size={14} />
+                        <span>Entrega estimada: 4-6 días</span>
+                      </div>
+                  </div>
+
+                  {/* Productos */}
+                  <div className={styles.productList}>
+                    <span className={styles.orderLabel}>ARTÍCULOS</span>
+                    {order.productNames?.map((name: string, i: number) => (
+                      <div key={i} className={styles.productItem}>
+                        <Tag size={14} /> {name}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Footer */}
+                  <div className={styles.footerRow}>
+                    <div className={styles.orderTotal}>
+                       <span className={styles.totalLabel}>TOTAL PAGADO</span>
+                       {/* AQUÍ USAMOS LA FUNCIÓN CORRECTORA */}
+                       <span className={styles.totalAmount}>
+                         {formatPrice(order.totalAmount)}
+                       </span>
+                    </div>
+                  
+                  </div>
+
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 };

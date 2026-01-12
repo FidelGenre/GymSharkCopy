@@ -12,3 +12,16 @@ export interface Product {
   description?: string;
   sizes: string[];
 }
+
+// Define esto en tu carpeta de types o directamente en Checkout.tsx
+export interface ShippingAddress {
+  email: string;
+  nombre: string;
+  apellido: string;
+  direccion: string;
+  departamento?: string;
+  codigoPostal: string;
+  ciudad: string;
+  provincia: string; // En tus capturas es "Santa Fe"
+  telefono: string;
+}

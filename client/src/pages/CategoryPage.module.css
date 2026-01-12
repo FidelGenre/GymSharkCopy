@@ -1,14 +1,15 @@
 .pageContainer {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 130px 4% 80px; /* Margen superior para no quedar bajo la Navbar fija */
+  /* CAMBIO: Reducido de 130px a 100px para subir el contenido */
+  padding: 100px 4% 80px; 
 }
 
 .breadcrumb {
   font-size: 11px;
   font-weight: 700;
   color: #707070;
-  margin-bottom: 12px;
+  margin-bottom: 10px; /* Reducido un poco */
   text-transform: uppercase;
 }
 
@@ -17,14 +18,16 @@
   justify-content: space-between;
   align-items: baseline;
   border-bottom: 1px solid #eee;
-  padding-bottom: 25px;
-  margin-bottom: 35px;
+  /* CAMBIO: Reducido padding y margin para pegar más las cards al título */
+  padding-bottom: 15px;
+  margin-bottom: 25px; 
 }
 
 .title {
   font-size: 32px;
   font-weight: 950;
   letter-spacing: -1px;
+  text-transform: uppercase; /* Asegura que el título sea mayúscula como en la imagen */
 }
 
 .count {
@@ -57,19 +60,24 @@
 
 .filterGroup li {
   font-size: 13px;
-  font-weight: 700;
-  padding: 10px 0;
+  font-weight: 600; /* Un poco más fino para texto normal */
+  padding: 8px 0;
   cursor: pointer;
-  color: #444;
+  color: #777; /* Color gris por defecto */
   transition: color 0.2s;
 }
 
+/* Clase para el filtro activo */
 .activeFilter {
   color: #000 !important;
+  font-weight: 800 !important; /* Más negrita cuando está activo */
   text-decoration: underline;
+  text-underline-offset: 4px; /* Separa un poco el subrayado */
 }
 
-.filterGroup li:hover { color: #000; }
+.filterGroup li:hover {
+  color: #000;
+}
 
 .productGrid {
   flex-grow: 1;
@@ -103,6 +111,7 @@
 }
 
 @media (max-width: 1024px) {
-  .sidebar { display: none; } /* En móviles la barra lateral se oculta */
-  .pageContainer { padding-top: 100px; }
+  .sidebar { display: none; }
+  /* Ajuste para móvil también */
+  .pageContainer { padding-top: 80px; } 
 }

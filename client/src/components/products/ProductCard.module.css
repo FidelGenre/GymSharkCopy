@@ -4,7 +4,7 @@
   flex-direction: column;
   background: #fff;
   cursor: pointer;
-  position: relative; /* Necesario para el overlay */
+  position: relative;
 }
 
 .imageContainer {
@@ -23,7 +23,37 @@
   transition: transform 0.4s ease;
 }
 
-/* --- ESTILOS DEL BOTÓN DELANTE DE LA CARD --- */
+/* --- ETIQUETAS Y BADGES --- */
+/* Estilo para el tag normal */
+.tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #fff;
+  color: #000;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 900;
+  z-index: 10;
+  text-transform: uppercase;
+}
+
+/* Estilo NUEVO para el descuento (15% OFF TC) */
+.badgeDiscount {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #000; /* Fondo negro para resaltar */
+  color: #fff;      /* Texto blanco */
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 900;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- OVERLAY Y BOTÓN --- */
 .overlay {
   position: absolute;
   bottom: 0;
@@ -31,15 +61,14 @@
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: flex-end; /* Lo posicionamos abajo */
+  align-items: flex-end;
   justify-content: center;
   padding-bottom: 20px;
-  background: rgba(0, 0, 0, 0.05); /* Un tinte muy suave */
-  opacity: 0; /* Oculto por defecto */
+  background: rgba(0, 0, 0, 0.05);
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-/* Al pasar el mouse por la card, mostramos el botón */
 .card:hover .overlay {
   opacity: 1;
 }
@@ -52,35 +81,84 @@
   background-color: #fff;
   color: #000;
   border: none;
-  width: 85%; /* No ocupa todo el ancho para que se vea moderno */
+  width: 85%;
   padding: 12px 0;
   font-weight: 800;
   font-size: 13px;
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
 .quickAddBtn:hover {
   background-color: #f0f0f0;
 }
 
-/* Resto de estilos (Nombre, Precio, etc.) */
-.tag {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #fff;
-  color: #000;
-  padding: 4px 10px;
-  font-size: 10px;
-  font-weight: 900;
-  z-index: 10;
+/* --- INFO DEL PRODUCTO --- */
+.info {
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.info { padding: 12px 0; }
-.mainRow { display: flex; justify-content: space-between; margin-bottom: 4px; }
-.name { font-size: 14px; font-weight: 700; margin: 0; color: #000; max-width: 75%; }
-.price { font-size: 14px; font-weight: 700; color: #000; }
-.category { font-size: 12px; color: #767676; margin: 0; text-transform: uppercase; }
+.mainRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+  /* Evita que el nombre choque si es muy largo */
+  line-height: 1.2;
+}
+
+.category {
+  font-size: 12px;
+  color: #767676;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* --- SECCIÓN DE PRECIOS (Lógica Modificada) --- */
+.priceContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Contenedor cuando hay descuento: alinea precio nuevo y viejo */
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre el precio nuevo y el tachado */
+}
+
+/* El precio actual (sea con descuento o normal) */
+.price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+/* El precio anterior tachado */
+.oldPrice {
+  font-size: 12px;
+  text-decoration: line-through;
+  color: #999; /* Gris suave */
+  font-weight: 400;
+}
+
+/* --- MEDIA QUERY PARA MÓVILES (Opcional pero recomendado) --- */
+/* En pantallas táctiles, mostramos el botón siempre o ajustamos la interacción */
+@media (hover: none) {
+  .overlay {
+    opacity: 0; /* Oculto en móvil por defecto para ver la foto limpia */
+  }
+  /* Si quisieras que el botón siempre se vea en móvil, pon opacity: 1 aquí */
+}

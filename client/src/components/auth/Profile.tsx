@@ -1,58 +1,119 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import axios from 'axios';
-import { LogOut, Package, User, Mail } from 'lucide-react';
+// import axios from 'axios'; // Descomentar cuando tengas backend real
+import { LogOut, Package, User, Mail, Phone, Lock, Save, ShieldCheck, Info } from 'lucide-react';
 import styles from './Profile.module.css';
 
-// CORRECCIÓN: Los nombres deben coincidir con los campos del JSON de Java
-interface Order {
-  id: number;
-  orderDate: string;  // Antes era 'date'
-  totalAmount: number; // Antes era 'total'
-  status: string;
-  productNames: string[];
-}
-
 const Profile: React.FC = () => {
-  const { user, logout } = useAuth();
+  // Ahora traemos también 'loading' y 'updateUser' del contexto
+  const { user, logout, loading, updateUser } = useAuth(); 
   const navigate = useNavigate();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
+  
+  // Estado para el formulario de datos personales
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: ''
+  });
 
+  // Estado para el cambio de contraseña
+  const [passData, setPassData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  const [isSaving, setIsSaving] = useState(false); // Loading local del botón guardar
+  const [message, setMessage] = useState({ type: '', text: '' });
+
+  // EFECTO DE PROTECCIÓN Y CARGA DE DATOS
   useEffect(() => {
+    // 1. Si el contexto está cargando, NO hacemos nada (esperamos)
+    if (loading) return;
+
+    // 2. Si terminó de cargar y no hay usuario, fuera.
     if (!user) {
       navigate('/login');
       return;
     }
 
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/orders/user/${user.id}`);
-        setOrders(response.data);
-      } catch (error) {
-        console.error("Error al obtener pedidos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, [user, navigate]);
+    // 3. Si hay usuario, llenamos el form
+    setFormData({
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      email: user.email || '',
+      phone: user.phone || ''
+    });
+    
+  }, [user, loading, navigate]);
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      // AQUÍ: Llamada al backend real
+      // await axios.put(`http://localhost:8080/api/users/${user?.id}`, formData);
+      
+      // Simulación de delay de red
+      await new Promise(resolve => setTimeout(resolve, 800)); 
+
+      // --- PASO CRUCIAL: Actualizar el contexto global ---
+      updateUser({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone
+      });
+      // --------------------------------------------------
+
+      setMessage({ type: 'success', text: '¡Perfil actualizado correctamente!' });
+    } catch (error) {
+      console.error(error);
+      setMessage({ type: 'error', text: 'Error al actualizar el perfil.' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passData.newPassword !== passData.confirmPassword) {
+      setMessage({ type: 'error', text: 'Las nuevas contraseñas no coinciden.' });
+      return;
+    }
+    
+    // Lógica simulada
+    alert("Funcionalidad de cambio de contraseña simulada");
+    setPassData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  };
+
+  // Renderizado condicional para evitar "parpadeos" o errores
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}>
+        <div className={styles.loader}>Cargando perfil...</div>
+      </div>
+    );
+  }
+
   if (!user) return null;
 
   return (
     <div className={styles.profileContainer}>
+      
+      {/* --- SIDEBAR --- */}
       <div className={styles.sidebar}>
         <div className={styles.userInfo}>
           <div className={styles.avatar}>
-            {user.firstName[0]}{user.lastName[0]}
+            {user.firstName?.[0]}{user.lastName?.[0]}
           </div>
           <h3>{user.firstName} {user.lastName}</h3>
           <p>{user.email}</p>
@@ -71,72 +132,141 @@ const Profile: React.FC = () => {
         </nav>
       </div>
 
+      {/* --- CONTENIDO PRINCIPAL --- */}
       <main className={styles.content}>
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>DETALLES DE LA CUENTA</h2>
-          <div className={styles.detailsGrid}>
-            <div className={styles.detailCard}>
-              <User size={20} />
-              <div>
-                <span>Nombre Completo</span>
-                <p>{user.firstName} {user.lastName}</p>
-              </div>
-            </div>
-            <div className={styles.detailCard}>
-              <Mail size={20} />
-              <div>
-                <span>Correo Electrónico</span>
-                <p>{user.email}</p>
-              </div>
-            </div>
+        
+        {/* Mensajes de feedback */}
+        {message.text && (
+          <div className={`${styles.alert} ${styles[message.type]}`}>
+            {message.type === 'success' ? <ShieldCheck size={18} /> : <Info size={18} />}
+            {message.text}
           </div>
-        </section>
+        )}
 
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>HISTORIAL DE COMPRAS</h2>
-          {loading ? (
-            <p className={styles.infoText}>Cargando tus pedidos...</p>
-          ) : orders.length > 0 ? (
-            <div className={styles.ordersTableWrapper}>
-              <table className={styles.ordersTable}>
-                <thead>
-                  <tr>
-                    <th>ID PEDIDO</th>
-                    <th>FECHA</th>
-                    <th>ESTADO</th>
-                    <th>TOTAL</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order.id}>
-                      <td className={styles.orderId}>#{order.id}</td>
-                      {/* CORRECCIÓN: Usar orderDate */}
-                      <td>{order.orderDate ? new Date(order.orderDate).toLocaleDateString() : '---'}</td>
-                      <td>
-                        <span className={`${styles.statusBadge} ${styles[order.status.toLowerCase()]}`}>
-                          {order.status}
-                        </span>
-                      </td>
-                      {/* CORRECCIÓN: Usar totalAmount y validación opcional */}
-                      <td className={styles.orderTotal}>
-                        ${(order.totalAmount || 0).toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {/* SECCIÓN 1: DATOS PERSONALES */}
+        <section className={styles.cardSection}>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.sectionTitle}>INFORMACIÓN PERSONAL</h2>
+            <p className={styles.sectionSubtitle}>Actualiza tus datos de contacto y envío predeterminados.</p>
+          </div>
+          
+          <form onSubmit={handleProfileUpdate} className={styles.formGrid}>
+            <div className={styles.inputGroup}>
+              <label>Nombre</label>
+              <div className={styles.inputWrapper}>
+                <User size={16} className={styles.icon} />
+                <input 
+                  type="text" 
+                  value={formData.firstName} 
+                  onChange={e => setFormData({...formData, firstName: e.target.value})}
+                />
+              </div>
             </div>
-          ) : (
-            <div className={styles.noOrders}>
-              <Package size={48} opacity={0.2} />
-              <p>Aún no has realizado ninguna compra.</p>
-              <button onClick={() => navigate('/')} className={styles.shopBtn}>
-                IR A LA TIENDA
+
+            <div className={styles.inputGroup}>
+              <label>Apellido</label>
+              <div className={styles.inputWrapper}>
+                <User size={16} className={styles.icon} />
+                <input 
+                  type="text" 
+                  value={formData.lastName} 
+                  onChange={e => setFormData({...formData, lastName: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label>Correo Electrónico</label>
+              <div className={styles.inputWrapper}>
+                <Mail size={16} className={styles.icon} />
+                <input 
+                  type="email" 
+                  value={formData.email} 
+                  disabled 
+                  className={styles.disabledInput}
+                />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label>Teléfono</label>
+              <div className={styles.inputWrapper}>
+                <Phone size={16} className={styles.icon} />
+                <input 
+                  type="tel" 
+                  value={formData.phone} 
+                  placeholder="+54 ..."
+                  onChange={e => setFormData({...formData, phone: e.target.value})}
+                />
+              </div>
+            </div>
+
+            <div className={styles.formFooter}>
+              <button type="submit" className={styles.saveBtn} disabled={isSaving}>
+                {isSaving ? 'GUARDANDO...' : (
+                  <> <Save size={18} /> GUARDAR CAMBIOS </>
+                )}
               </button>
             </div>
-          )}
+          </form>
         </section>
+
+        {/* SECCIÓN 2: SEGURIDAD */}
+        <section className={styles.cardSection}>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.sectionTitle}>SEGURIDAD</h2>
+            <p className={styles.sectionSubtitle}>Cambia tu contraseña para mantener tu cuenta segura.</p>
+          </div>
+
+          <form onSubmit={handlePasswordChange} className={styles.securityForm}>
+            <div className={styles.inputGroup}>
+              <label>Contraseña Actual</label>
+              <div className={styles.inputWrapper}>
+                <Lock size={16} className={styles.icon} />
+                <input 
+                  type="password" 
+                  placeholder="••••••••"
+                  value={passData.currentPassword}
+                  onChange={e => setPassData({...passData, currentPassword: e.target.value})}
+                />
+              </div>
+            </div>
+            
+            <div className={styles.rowTwo}>
+              <div className={styles.inputGroup}>
+                <label>Nueva Contraseña</label>
+                <div className={styles.inputWrapper}>
+                  <Lock size={16} className={styles.icon} />
+                  <input 
+                    type="password" 
+                    placeholder="••••••••"
+                    value={passData.newPassword}
+                    onChange={e => setPassData({...passData, newPassword: e.target.value})}
+                  />
+                </div>
+              </div>
+              <div className={styles.inputGroup}>
+                <label>Confirmar Nueva</label>
+                <div className={styles.inputWrapper}>
+                  <Lock size={16} className={styles.icon} />
+                  <input 
+                    type="password" 
+                    placeholder="••••••••"
+                    value={passData.confirmPassword}
+                    onChange={e => setPassData({...passData, confirmPassword: e.target.value})}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.formFooter}>
+              <button type="submit" className={styles.outlineBtn}>
+                ACTUALIZAR CONTRASEÑA
+              </button>
+            </div>
+          </form>
+        </section>
+
       </main>
     </div>
   );

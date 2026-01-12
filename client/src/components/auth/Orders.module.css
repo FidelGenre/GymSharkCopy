@@ -1,15 +1,106 @@
-.container {
-  padding: 80px 5%;
-  max-width: 900px;
-  margin: 0 auto;
+/* Layout Principal */
+.profileContainer {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 40px;
   min-height: 70vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* --- ESTILOS DEL SIDEBAR --- */
+.sidebar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  text-align: center;
+  padding: 30px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  background: #000;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 900;
+  margin: 0 auto 15px;
+}
+
+.userInfo h3 {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.userInfo p {
+  font-size: 14px;
+  color: #767676;
+}
+
+.sideNav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sideNav button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background: none;
+  border: none;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+  transition: 0.2s;
+  width: 100%;
+}
+
+.sideNav button:hover {
+  background: #f9f9f9;
+}
+
+.activeTab {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+.logoutBtn {
+  color: #ff4444;
+  margin-top: 20px;
+  border-top: 1px solid #eee !important;
+  border-radius: 0 !important;
+}
+
+/* --- ESTILOS DEL CONTENIDO (Orders) --- */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .pageTitle {
   font-weight: 900;
   font-size: 28px;
-  margin-bottom: 50px;
-  text-align: center;
+  margin-bottom: 30px;
+  text-align: left;
   letter-spacing: -0.5px;
 }
 
@@ -54,6 +145,7 @@
   font-size: 15px;
 }
 
+/* Badge de Estado */
 .orderStatus {
   background: #000;
   color: #fff;
@@ -64,22 +156,45 @@
   text-transform: uppercase;
 }
 
-/* Colores de estado opcionales si tu backend los envía */
-.completado { background: #000; }
-.pendiente { background: #767676; }
+/* Estados dinámicos */
+.delivered { background: #000; }
+.pending { background: #767676; }
 
 .cardBody {
   padding: 25px;
 }
 
+/* --- NUEVO: Modificado para soportar la fecha y la entrega --- */
 .orderMeta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap; /* Para móviles */
+  gap: 15px; /* Espacio entre fecha y entrega */
   font-size: 13px;
   font-weight: 600;
   color: #545454;
   margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0; /* Agregué una línea sutil abajo */
+}
+
+/* --- NUEVO: Estilo específico para el bloque de entrega --- */
+.deliveryInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f0fff4; /* Un verde muy sutil de fondo */
+  color: #166534; /* Verde oscuro para el texto */
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.metaDate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .productList {
@@ -96,15 +211,24 @@
   color: #111;
 }
 
+/* --- NUEVO: Divisor visual si se necesita separar secciones --- */
+.divider {
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 15px 0;
+}
+
 .footerRow {
   border-top: 1px solid #f0f0f0;
   padding-top: 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between; /* Separar Total y Botón */
+  align-items: center;
 }
 
 .orderTotal {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
 }
 
 .totalLabel {
@@ -120,6 +244,25 @@
   font-weight: 900;
 }
 
+/* --- NUEVO: Botón "Ver detalles" --- */
+.detailsBtn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: opacity 0.2s;
+}
+
+.detailsBtn:hover {
+  text-decoration: underline;
+}
+
+/* Empty State */
 .centered {
   padding: 150px 20px;
   text-align: center;
@@ -135,6 +278,8 @@
   align-items: center;
   gap: 20px;
   color: #767676;
+  border: 2px dashed #eee;
+  border-radius: 8px;
 }
 
 .empty {
@@ -150,4 +295,17 @@
   font-weight: 800;
   font-size: 14px;
   cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .profileContainer {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+  }
+  .pageTitle {
+    text-align: center;
+  }
 }

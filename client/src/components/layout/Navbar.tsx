@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, User, ShoppingBag, Menu, X } from 'lucide-react'; // Eliminados LogOut y Package
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Search, User, ShoppingBag, Menu, X, ArrowLeft } from 'lucide-react';
 import styles from './Navbar.module.css';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -10,13 +10,20 @@ import MegaMenu from './MegaMenu';
 const logoUrl = '/gymsharklogo.avif';
 
 const Navbar: React.FC = () => {
-  // Eliminado useNavigate ya que no se utilizaba en el componente
+  const location = useLocation();
+  const navigate = useNavigate();
   const { setIsDrawerOpen, totalItems } = useCart();
-  const { user } = useAuth(); // Eliminado logout ya que no se utilizaba aquí
+  const { user } = useAuth();
   
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<'MUJER' | 'HOMBRE' | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // --- LÓGICA MINIMALISTA ---
+  // Detectar si estamos en una de las páginas limpias
+  const isMinimalistPage = ['/login', '/register', '/profile', '/orders', '/checkout'].some(path => 
+    location.pathname.startsWith(path)
+  );
 
   const handleOpenCart = () => {
     setActiveMenu(null);
@@ -29,6 +36,30 @@ const Navbar: React.FC = () => {
     setActiveMenu(null);
   };
 
+  // --- RENDERIZADO 1: NAVBAR MINIMALISTA (Login, Profile, etc.) ---
+  if (isMinimalistPage) {
+    return (
+      <header className={styles.minimalHeader}>
+        <div className={styles.minimalContainer}>
+          {/* Botón Volver */}
+          <button onClick={() => navigate(-1)} className={styles.backButton}>
+            <ArrowLeft color="black" size={24} />
+            <span className={styles.backText}>Volver</span>
+          </button>
+
+          {/* Logo Centrado */}
+          <Link to="/" className={styles.logoMinimal}>
+             <img src={logoUrl} alt="Gymshark Logo" className={styles.logoImage} />
+          </Link>
+          
+          {/* Espaciador vacío para equilibrar el centro */}
+          <div style={{ width: '60px' }}></div> 
+        </div>
+      </header>
+    );
+  }
+
+  // --- RENDERIZADO 2: NAVBAR COMPLETA (Home, Tienda) ---
   return (
     <>
       <header 
@@ -68,7 +99,6 @@ const Navbar: React.FC = () => {
               
               <div className={styles.authSection}>
                 {user ? (
-                  /* ENLACE AL PERFIL */
                   <Link to="/profile" className={styles.userSessionLink}>
                     <div className={styles.userIconWrapper}>
                       <User size={22} strokeWidth={1.5} />

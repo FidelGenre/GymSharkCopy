@@ -12,8 +12,35 @@ const Checkout: React.FC = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
   const { user } = useAuth();
 
-  const [useShippingAsBilling, setUseShippingAsBilling] = useState(true);
   const shippingCost = 15500;
+  
+  // NUEVO: Estado para tipo de pago (Crédito o Débito)
+  const [paymentType, setPaymentType] = useState<'credit' | 'debit'>('debit');
+  
+  // Mantenemos esto: Checkbox para la dirección de facturación
+  const [useShippingAsBilling, setUseShippingAsBilling] = useState(true);
+
+  // --- LÓGICA DE DESCUENTO ---
+  // Calcula el total dinámicamente según la tarjeta seleccionada
+  const calculateTotals = () => {
+    let subtotal = cartTotal;
+    let discount = 0;
+
+    // Ejemplo: 15% de descuento si es Crédito
+    if (paymentType === 'credit') {
+      discount = subtotal * 0.15;
+      subtotal = subtotal - discount;
+    }
+
+    return {
+      subtotalOriginal: cartTotal,
+      discountAmount: discount,
+      subtotalFinal: subtotal,
+      totalToPay: subtotal + shippingCost
+    };
+  };
+
+  const { subtotalFinal, totalToPay, discountAmount } = calculateTotals();
 
   // 1. Estado para dirección de envío
   const [formData, setFormData] = useState({
@@ -29,7 +56,7 @@ const Checkout: React.FC = () => {
     country: 'Argentina'
   });
 
-  // 2. Estado para dirección de facturación (Billing)
+  // 2. Estado para dirección de facturación
   const [billingData, setBillingData] = useState({
     firstName: '',
     lastName: '',
@@ -74,33 +101,59 @@ const Checkout: React.FC = () => {
 
   const handleFinishPurchase = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Decidir dirección de facturación basada en el checkbox
+    const billingSource = useShippingAsBilling ? formData : billingData;
+
     try {
-      // Payload ajustado para Card.java (Backend)
       const paymentPayload = {
+        // Datos de Tarjeta y Monto Final (con descuento aplicado)
         email: formData.email,
         cardNumber: cardData.number.replace(/\s/g, ''),
         cardHolderName: cardData.name,
         expiryDate: cardData.expiry,
         cvv: cardData.cvv,
-        amount: cartTotal + shippingCost
+        amount: totalToPay, 
+        paymentType: paymentType, // Enviamos el tipo para registro
+
+        // Datos de Entrega
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        address: formData.address,
+        apartment: formData.apartment,
+        city: formData.city,
+        postalCode: formData.postalCode,
+        province: formData.province,
+        phone: formData.phone,
+
+        // Datos de Facturación
+        billingFirstName: billingSource.firstName,
+        billingLastName: billingSource.lastName,
+        billingAddress: billingSource.address, 
+        billingCity: billingSource.city,
+        billingPostalCode: billingSource.postalCode,
+        billingProvince: billingSource.province
       };
 
-      // 1. Guardar tarjeta
       const res = await axios.post('http://localhost:8080/api/payments/manual', paymentPayload);
 
       if (res.status === 200 || res.status === 201) {
-        // 2. Crear Orden
+        // Al crear la orden, guardamos el precio real que pagó el usuario por ítem
         const orderData = {
           userId: user?.id || null,
-          totalAmount: cartTotal + shippingCost,
+          totalAmount: totalToPay,
           status: "COMPLETADO",
-          items: cartItems?.map(item => ({
-            productId: item.id,
-            name: item.name,
-            size: item.selectedSize,
-            quantity: item.quantity,
-            price: item.price
-          }))
+          items: cartItems?.map(item => {
+            // Si hubo descuento, prorrateamos el precio del item
+            const finalItemPrice = paymentType === 'credit' ? item.price * 0.85 : item.price;
+            return {
+              productId: item.id,
+              name: item.name,
+              size: item.selectedSize,
+              quantity: item.quantity,
+              price: finalItemPrice 
+            };
+          })
         };
 
         await axios.post('http://localhost:8080/api/orders', orderData);
@@ -109,6 +162,7 @@ const Checkout: React.FC = () => {
         navigate('/orders'); 
       }
     } catch (error) {
+      console.error(error);
       alert("Error al procesar el pago. Verifica los datos.");
     }
   };
@@ -119,6 +173,7 @@ const Checkout: React.FC = () => {
         <div className={styles.leftColumn}>
           <form onSubmit={handleFinishPurchase}>
             
+            {/* SECCIÓN CONTACTO */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>CONTACTO</h2>
               <input 
@@ -131,6 +186,7 @@ const Checkout: React.FC = () => {
               </label>
             </div>
 
+            {/* SECCIÓN ENTREGA */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>ENTREGA</h2>
               <div className={styles.selectWrapper}>
@@ -162,6 +218,7 @@ const Checkout: React.FC = () => {
               <input type="tel" placeholder="Teléfono" className={styles.inputField} required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}/>
             </div>
 
+            {/* SECCIÓN MÉTODO DE ENVÍO */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>MÉTODO DE ENVÍO</h2>
               <div className={styles.shippingMethodBox}>
@@ -170,9 +227,12 @@ const Checkout: React.FC = () => {
               </div>
             </div>
 
+            {/* SECCIÓN PAGO */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>PAGO</h2>
               <div className={styles.paymentContainer}>
+                
+                {/* HEADER CON IMÁGENES (Conservado) */}
                 <div className={styles.paymentHeader}>
                   <div className={styles.paymentType}>
                     <div className={styles.radioActive}></div>
@@ -188,6 +248,32 @@ const Checkout: React.FC = () => {
                 </div>
 
                 <div className={styles.cardForm}>
+                  
+                  {/* SELECTOR DE TIPO DE TARJETA (NUEVO) */}
+                  <div className={styles.typeSelector}>
+                    <label className={`${styles.typeOption} ${paymentType === 'debit' ? styles.selected : ''}`}>
+                      <input 
+                        type="radio" 
+                        name="paymentType" 
+                        value="debit" 
+                        checked={paymentType === 'debit'}
+                        onChange={() => setPaymentType('debit')}
+                      />
+                      <span>Débito</span>
+                    </label>
+
+                    <label className={`${styles.typeOption} ${paymentType === 'credit' ? styles.selected : ''}`}>
+                      <input 
+                        type="radio" 
+                        name="paymentType" 
+                        value="credit" 
+                        checked={paymentType === 'credit'}
+                        onChange={() => setPaymentType('credit')}
+                      />
+                      <span>Crédito <small style={{color: '#2ecc71', fontWeight: 'bold'}}>(15% OFF)</small></span>
+                    </label>
+                  </div>
+
                   <div className={styles.inputWrapper}>
                     <input 
                       type="text" placeholder="Número de tarjeta" className={styles.cardInput} 
@@ -205,14 +291,19 @@ const Checkout: React.FC = () => {
                   <input type="text" placeholder="Nombre en la tarjeta" className={styles.cardInput} value={cardData.name} onChange={e => setCardData({...cardData, name: e.target.value})} required />
                 </div>
 
+                {/* TOGGLE FACTURACIÓN (RESTAURADO) */}
                 <div className={styles.billingToggle}>
                   <label className={styles.checkboxLabel}>
-                    <input type="checkbox" checked={useShippingAsBilling} onChange={() => setUseShippingAsBilling(!useShippingAsBilling)} />
+                    <input 
+                      type="checkbox" 
+                      checked={useShippingAsBilling} 
+                      onChange={() => setUseShippingAsBilling(!useShippingAsBilling)} 
+                    />
                     <span>Usar dirección de envío como dirección de facturación</span>
                   </label>
                 </div>
 
-                {/* FORMULARIO DE FACTURACIÓN (BILLING) */}
+                {/* FORMULARIO DE FACTURACIÓN (Solo si el checkbox está desmarcado) */}
                 {!useShippingAsBilling && (
                   <div className={styles.billingAddressForm}>
                     <h3 className={styles.billingTitle}>DIRECCIÓN DE FACTURACIÓN</h3>
@@ -242,7 +333,9 @@ const Checkout: React.FC = () => {
               </div>
             </div>
 
-            <button type="submit" className={styles.payNowBtn}>PAGAR AHORA</button>
+            <button type="submit" className={styles.payNowBtn}>
+              PAGAR AHORA {formatARS(totalToPay)}
+            </button>
           </form>
         </div>
 
@@ -251,6 +344,9 @@ const Checkout: React.FC = () => {
             {cartItems?.map((item) => {
               const rawImg = item.image || (item.images && item.images[0]) || '';
               const displayImage = rawImg.startsWith('http') ? rawImg : rawImg.startsWith('/') ? rawImg : `/${rawImg}`;
+              
+              // Precio visual para el resumen
+              const unitPrice = paymentType === 'credit' ? item.price * 0.85 : item.price;
 
               return (
                 <div key={`${item.id}-${item.selectedSize}`} className={styles.summaryItem}>
@@ -265,8 +361,9 @@ const Checkout: React.FC = () => {
                   <div className={styles.itemInfo}>
                     <p className={styles.itemName}>{item.name}</p>
                     <p className={styles.itemSize}>{item.selectedSize}</p>
+                    {paymentType === 'credit' && <span className={styles.discountTag}>15% OFF aplicado</span>}
                   </div>
-                  <p className={styles.itemPrice}>{formatARS(item.price * item.quantity)}</p>
+                  <p className={styles.itemPrice}>{formatARS(unitPrice * item.quantity)}</p>
                 </div>
               );
             })}
@@ -274,9 +371,17 @@ const Checkout: React.FC = () => {
 
           <div className={styles.totals}>
             <div className={styles.totalLine}><span>Subtotal</span><span>{formatARS(cartTotal)}</span></div>
+            
+            {paymentType === 'credit' && (
+               <div className={styles.totalLine} style={{color: '#2ecc71'}}>
+                 <span>Descuento Tarjeta Crédito</span>
+                 <span>- {formatARS(discountAmount)}</span>
+               </div>
+            )}
+            
             <div className={styles.totalLine}><span>Envío</span><span>{formatARS(shippingCost)}</span></div>
             <div className={`${styles.totalLine} ${styles.grandTotal}`}>
-              <span>Total</span><span><strong>{formatARS(cartTotal + shippingCost)}</strong></span>
+              <span>Total</span><span><strong>{formatARS(totalToPay)}</strong></span>
             </div>
           </div>
         </aside>

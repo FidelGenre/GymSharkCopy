@@ -1,8 +1,9 @@
 .footer {
   background-color: #ffffff;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid #e5e5e5;
   padding: 80px 0 40px 0;
   width: 100%;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .container {
@@ -18,12 +19,14 @@
   margin-bottom: 60px;
 }
 
+/* --- TIPOGRAFÍA Y TÍTULOS --- */
 .title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   margin-bottom: 24px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   color: #000;
+  text-transform: uppercase;
 }
 
 .list {
@@ -38,58 +41,224 @@
 
 .list a {
   text-decoration: none;
-  color: #6d6d6d;
+  color: #666;
   font-size: 14px;
-  transition: color 0.2s;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .list a:hover {
   color: #000;
+  text-decoration: underline;
 }
 
 .text {
   font-size: 14px;
-  color: #6d6d6d;
-  line-height: 1.5;
+  color: #666;
+  line-height: 1.6;
   margin-bottom: 16px;
+  font-weight: 500;
+}
+
+/* --- NEWSLETTER FORM --- */
+.newsletterForm {
+  display: flex;
+  gap: 0;
+  border: 1px solid #ccc;
+  min-height: 42px;
+  position: relative;
 }
 
 .input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
   font-family: inherit;
+  font-size: 14px;
+  background: transparent;
+  outline: none;
 }
 
+.submitBtn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 0 24px;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+  letter-spacing: 1px;
+}
+
+.submitBtn:hover {
+  background-color: #333;
+}
+
+.submitBtn:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+/* Mensaje de éxito (verde) */
+.successMessage {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2e7d32;
+  font-weight: 700;
+  font-size: 13px;
+  background-color: #e8f5e9;
+}
+
+/* --- SECCIÓN DE CONTACTO (Debajo del Newsletter) --- */
+.contactWrapper {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee; /* Línea separadora */
+}
+
+.contactLabel {
+  display: block;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.contactEmail {
+  font-weight: 800 !important;
+  color: #000 !important;
+  font-size: 14px;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 0.2s;
+}
+
+.contactEmail:hover {
+  border-bottom: 2px solid #000;
+}
+
+/* --- TOOLTIPS (POP-UPS) --- */
+.tooltipWrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.fakeLink {
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+  user-select: none;
+}
+
+.fakeLink:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.tooltipBox {
+  visibility: hidden;
+  opacity: 0;
+  width: 240px;
+  background-color: #111; /* Negro puro */
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  
+  position: absolute;
+  z-index: 100;
+  bottom: 140%; /* Aparece arriba del texto */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  /* Importante: para que no bloquee clicks cuando está oculto */
+  pointer-events: none; 
+}
+
+.tooltipClose {
+  margin-top: 8px;
+  font-size: 10px;
+  color: #888;
+  border-top: 1px solid #444;
+  padding-top: 4px;
+}
+
+/* Flechita del tooltip */
+.tooltipBox::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #111 transparent transparent transparent;
+}
+
+/* Estado Activo (Abierto) */
+.tooltipBox.active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto; /* Habilita clicks para poder cerrar */
+}
+
+/* --- BARRA INFERIOR (LEGAL + COPYRIGHT) --- */
 .bottomBar {
-  border-top: 1px solid #eeeeee;
-  padding-top: 40px;
+  border-top: 1px solid #e5e5e5;
+  padding-top: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12px;
-  color: #999;
+  font-size: 11px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .legalLinks {
   display: flex;
-  gap: 20px;
+  gap: 24px;
 }
 
 .legalLinks a {
   text-decoration: none;
-  color: #999;
+  color: #888;
+  transition: color 0.2s;
 }
 
-/* Responsivo para tablets/móviles */
+.legalLinks a:hover {
+  color: #000;
+}
+
+/* --- RESPONSIVE (MÓVIL) --- */
 @media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr); /* Una sola columna */
+    gap: 30px;
   }
   
   .bottomBar {
-    flex-direction: column;
+    flex-direction: column-reverse; /* Copyright abajo */
     gap: 20px;
     text-align: center;
+  }
+  
+  .legalLinks {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
   }
 }

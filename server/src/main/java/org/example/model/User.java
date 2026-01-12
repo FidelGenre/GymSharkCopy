@@ -14,9 +14,12 @@ public class User {
     private String firstName;
     private String lastName;
 
+    // NUEVO CAMPO AGREGADO
+    private String phone;
+
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
-    private String password; // Se guardará cifrada con BCrypt
+    private String password; 
 }
