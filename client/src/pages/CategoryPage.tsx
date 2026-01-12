@@ -10,16 +10,17 @@ const CategoryPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Estado para el ordenamiento: 'relevance', 'asc' (menor precio), 'desc' (mayor precio)
   const [sortOption, setSortOption] = useState<'relevance' | 'asc' | 'desc'>('relevance');
 
-  const displayTitle = subCategory?.replace(/-/g, ' ').toUpperCase();
+  const displayTitle = subCategory?.replace(/-/g, ' ').toUpperCase() || '';
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/api/products`, {
+        // TIP: En producción, usa una variable de entorno para esta URL
+        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+        const response = await axios.get(`${API_URL}/api/products`, {
           params: {
             category: gender,      
             subCategory: displayTitle 
@@ -34,24 +35,22 @@ const CategoryPage: React.FC = () => {
     };
 
     fetchCategoryProducts();
-    // Reseteamos el filtro al cambiar de categoría
     setSortOption('relevance');
   }, [gender, subCategory, displayTitle]);
 
-  // --- LÓGICA DE ORDENAMIENTO ---
+  // --- LÓGICA DE ORDENAMIENTO CORREGIDA ---
   const sortedProducts = useMemo(() => {
-    // Creamos una copia para no mutar el estado original
     const items = [...products];
 
     if (sortOption === 'asc') {
-      return items.sort((a, b) => a.price - b.price);
+      return items.sort((a, b) => Number(a.price) - Number(b.price));
     } 
     if (sortOption === 'desc') {
-      return items.sort((a, b) => b.price - a.price);
+      return items.sort((a, b) => Number(b.price) - Number(a.price));
     }
     
-    // Si es 'relevance', devolvemos el array tal cual viene de la API (por ID o fecha)
-    return items.sort((a, b) => a.id - b.id); 
+    // Solución al error TS2362/TS2363: forzamos el cast a Number
+    return items.sort((a, b) => Number(a.id) - Number(b.id)); 
   }, [products, sortOption]);
 
   return (

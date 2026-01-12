@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import styles from './Orders.module.css';
-import { Package, Tag, Clock, User, LogOut, Truck, ChevronRight } from 'lucide-react';
+import { Package, Tag, Clock, User, LogOut, Truck, } from 'lucide-react';
 
 const Orders: React.FC = () => {
   const { user, logout } = useAuth();

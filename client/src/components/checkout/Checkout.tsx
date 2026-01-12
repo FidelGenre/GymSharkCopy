@@ -40,7 +40,7 @@ const Checkout: React.FC = () => {
     };
   };
 
-  const { subtotalFinal, totalToPay, discountAmount } = calculateTotals();
+  const {  totalToPay, discountAmount } = calculateTotals();
 
   // 1. Estado para dirección de envío
   const [formData, setFormData] = useState({
