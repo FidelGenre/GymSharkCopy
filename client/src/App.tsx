@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from
 
 // 1. Proveedores de Estado (Contextos)
 import { CartProvider } from './context/CartContext';
-import { AuthProvider } from './context/AuthContext'; // Corregido de AuthProvider a AuthContext
+import { AuthProvider } from './context/AuthContext';
 
 // 2. Componentes de Estructura (Layout)
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import CartDrawer from './components/cart/CartDrawer';
+import AnnouncementBar from './components/layout/AnnouncementBar'; // Componente importado
 
 // 3. Componentes de Página
 import Hero from './components/home/Hero';
@@ -18,11 +19,10 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Checkout from './components/checkout/Checkout';
 import Orders from './components/auth/Orders';
-import Profile from './components/auth/Profile'; // Ruta específica de la carpeta Profile
+import Profile from './components/auth/Profile';
 
 import './App.css';
 
-// Componente para manejar la lógica de visibilidad según la ruta
 const AppContent: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,12 +30,15 @@ const AppContent: React.FC = () => {
   // Detectamos si estamos en checkout
   const isCheckoutPage = location.pathname === '/checkout';
 
-  // URL del logo (Asegúrate de que la ruta sea correcta en tu carpeta public)
+  // URL del logo
   const logoUrl = "/gymsharklogo.avif";
 
   return (
     <div className="App">
-      {/* HEADER SIMPLIFICADO PARA CHECKOUT O NAVBAR NORMAL */}
+      {/* 1. ANUNCIO DINÁMICO: Solo fuera de checkout */}
+      {!isCheckoutPage && <AnnouncementBar />}
+
+      {/* 2. HEADER: Simplificado para checkout o Navbar normal */}
       {isCheckoutPage ? (
         <header style={{ 
           padding: '15px 0', 
@@ -65,9 +68,10 @@ const AppContent: React.FC = () => {
         <Navbar />
       )}
 
-      {/* Solo mostramos el Drawer si NO estamos en checkout */}
+      {/* 3. UTILIDADES: Solo fuera de checkout */}
       {!isCheckoutPage && <CartDrawer />}
 
+      {/* 4. RUTAS */}
       <Routes>
         <Route path="/" element={<main><Hero /></main>} />
         <Route path="/category/:gender/:subCategory" element={<CategoryPage />} />
@@ -79,7 +83,7 @@ const AppContent: React.FC = () => {
         <Route path="/profile" element={<Profile />} />
       </Routes>
 
-      {/* Footer oculto en checkout */}
+      {/* 5. FOOTER: Oculto en checkout */}
       {!isCheckoutPage && <Footer />}
     </div>
   );

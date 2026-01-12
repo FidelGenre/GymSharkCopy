@@ -1,32 +1,30 @@
-.App {
-  width: 100%;
+/* Variables de color para consistencia global */
+:root {
+  --navbar-bg: #ffffff;
+  --font-main: 'Inter', sans-serif;
+  --font-heading: 'Oswald', sans-serif; /* Ideal para títulos y botones */
 }
 
-.sectionContainer {
-  width: 100%;
-  background-color: #fff;
-  padding-bottom: 80px;
-}
-
-.titleWrapper {
-  padding: 60px 40px 20px 40px;
-}
-
-.mainTitle {
-  font-size: 24px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  text-transform: uppercase;
-  color: #000;
+body {
   margin: 0;
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Ajustes para móviles */
-@media (max-width: 768px) {
-  .titleWrapper {
-    padding: 40px 20px 10px 20px;
-  }
-  .mainTitle {
-    font-size: 20px;
-  }
+/* Ajustes para el Navbar y Layout */
+.App-header {
+  background-color: var(--navbar-bg);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Estilo para el logo en checkout */
+.checkout-logo {
+  transition: transform 0.2s ease;
+}
+
+.checkout-logo:hover {
+  transform: scale(1.05);
 }
