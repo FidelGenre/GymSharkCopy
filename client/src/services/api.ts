@@ -1,13 +1,12 @@
 import axios from 'axios';
 
-// 1. Definimos la URL base
-// Si existe la variable de entorno de Vite (Producción), la usa.
-// Si no, usa localhost (Desarrollo).
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+// 1. Definimos la URL base apuntando DIRECTAMENTE a Render
+// Esto asegura que toda la app mire al servidor en la nube.
+const BACKEND_URL = 'https://gymsharkcopyserver.onrender.com';
 
 const api = axios.create({
   // 2. Concatenamos '/api' para que la URL final sea correcta
-  // Ejemplo Producción: https://gymsharkcopyserver.onrender.com/api
+  // Resultado: https://gymsharkcopyserver.onrender.com/api
   baseURL: `${BACKEND_URL}/api`, 
 });
 

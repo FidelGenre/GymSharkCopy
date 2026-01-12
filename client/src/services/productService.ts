@@ -1,10 +1,14 @@
 import axios from 'axios';
 import type { Product } from '../types/products';
 
-const API_URL = 'http://localhost:8080/api/products';
+// 🔴 ANTES (Localhost):
+// const API_URL = 'http://localhost:8080/api/products';
+
+// 🟢 AHORA (Render - Producción):
+const API_URL = 'https://gymsharkcopyserver.onrender.com/api/products';
 
 export const productService = {
-  // Obtiene todos los productos (con filtro opcional por categoría)
+  // Obtiene todos los productos
   getAll: async (category?: string | null): Promise<Product[]> => {
     const response = await axios.get<Product[]>(API_URL, {
       params: { category }
@@ -12,7 +16,7 @@ export const productService = {
     return response.data;
   },
 
-  // Obtiene un producto específico por su ID
+  // Obtiene un producto específico
   getById: async (id: string): Promise<Product> => {
     const response = await axios.get<Product>(`${API_URL}/${id}`);
     return response.data;

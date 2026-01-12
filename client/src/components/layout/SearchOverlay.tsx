@@ -18,9 +18,12 @@ const SearchOverlay: React.FC<Props> = ({ isOpen, onClose }) => {
     if (isOpen) {
       inputRef.current?.focus();
       document.body.style.overflow = 'hidden';
-      axios.get('http://localhost:8080/api/products')
+      
+      // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
+      axios.get('https://gymsharkcopyserver.onrender.com/api/products')
         .then(res => setAllProducts(res.data))
-        .catch(err => console.error("Error:", err));
+        .catch(err => console.error("Error al cargar productos para búsqueda:", err));
+        
     } else {
       document.body.style.overflow = 'unset';
       setSearchTerm('');

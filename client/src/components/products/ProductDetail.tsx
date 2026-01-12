@@ -23,7 +23,8 @@ const ProductDetail: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/products/${id}`);
+        // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
+        const response = await axios.get(`https://gymsharkcopyserver.onrender.com/api/products/${id}`);
         setProduct(response.data);
       } catch (error) {
         console.error("Error cargando el producto:", error);

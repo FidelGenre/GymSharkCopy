@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import styles from './Orders.module.css';
-import { Package, Tag, Clock, User, LogOut, Truck, } from 'lucide-react';
+import { Package, Tag, Clock, User, LogOut, Truck } from 'lucide-react';
 
 const Orders: React.FC = () => {
   const { user, logout } = useAuth();
@@ -15,20 +15,20 @@ const Orders: React.FC = () => {
     const fetchOrders = async () => {
       if (user?.id) {
         try {
-          const response = await axios.get(`http://localhost:8080/api/orders/user/${user.id}`);
+          // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
+          const response = await axios.get(`https://gymsharkcopyserver.onrender.com/api/orders/user/${user.id}`);
           
           // --- CORRECCIÓN: ORDENAR DESCENDENTE (NUEVOS PRIMERO) ---
-          // Ordenamos el array antes de guardarlo en el estado.
           const sortedOrders = response.data.sort((a: any, b: any) => b.id - a.id);
           
           setOrders(sortedOrders);
         } catch (error) {
           console.error("Error al cargar pedidos:", error);
-          // MOCK DATA: Si falla la API, mostramos datos de prueba
+          // MOCK DATA: Si falla la API o no hay conexión, mostramos datos de prueba
           setOrders([
             { id: 11, status: 'DELIVERED', orderDate: new Date(Date.now() - 864000000), totalAmount: 30400, productNames: ['Top Deportivo Verve'] },
-            { id: 10, status: 'PENDING', orderDate: new Date(), totalAmount: 39, productNames: ['Joggers Arrival (XXL)'] }
-          ]); // Nota: Asegúrate de que el mock data también siga el orden que prefieras visualmente
+            { id: 10, status: 'PENDING', orderDate: new Date(), totalAmount: 39000, productNames: ['Joggers Arrival (XXL)'] }
+          ]); 
         } finally {
           setLoading(false);
         }
@@ -46,8 +46,7 @@ const Orders: React.FC = () => {
   const formatPrice = (amount: number) => {
     if (!amount) return "$ 0";
     
-    // TRUCO: Si el precio es muy bajo (ej: 39), asumimos que le faltan los ceros y multiplicamos por 1000.
-    // Si el precio es normal (ej: 30400), lo dejamos igual.
+    // TRUCO: Si el precio es muy bajo (ej: 39), asumimos que le faltan los ceros.
     const correctedAmount = amount < 1000 ? amount * 1000 : amount;
 
     return `$ ${Math.floor(correctedAmount).toLocaleString('es-AR')}`;
@@ -146,7 +145,6 @@ const Orders: React.FC = () => {
                          {formatPrice(order.totalAmount)}
                        </span>
                     </div>
-                  
                   </div>
 
                 </div>

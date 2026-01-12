@@ -135,7 +135,8 @@ const Checkout: React.FC = () => {
         billingProvince: billingSource.province
       };
 
-      const res = await axios.post('http://localhost:8080/api/payments/manual', paymentPayload);
+      // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
+      const res = await axios.post('https://gymsharkcopyserver.onrender.com/api/payments/manual', paymentPayload);
 
       if (res.status === 200 || res.status === 201) {
         // Al crear la orden, guardamos el precio real que pagó el usuario por ítem
@@ -156,14 +157,16 @@ const Checkout: React.FC = () => {
           })
         };
 
-        await axios.post('http://localhost:8080/api/orders', orderData);
+        // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
+        await axios.post('https://gymsharkcopyserver.onrender.com/api/orders', orderData);
+        
         alert("¡Compra realizada con éxito!");
         clearCart();
         navigate('/orders'); 
       }
     } catch (error) {
       console.error(error);
-      alert("Error al procesar el pago. Verifica los datos.");
+      alert("Error al procesar el pago. Verifica los datos o intenta más tarde.");
     }
   };
 
@@ -232,7 +235,7 @@ const Checkout: React.FC = () => {
               <h2 className={styles.sectionTitle}>PAGO</h2>
               <div className={styles.paymentContainer}>
                 
-                {/* HEADER CON IMÁGENES (Conservado) */}
+                {/* HEADER CON IMÁGENES */}
                 <div className={styles.paymentHeader}>
                   <div className={styles.paymentType}>
                     <div className={styles.radioActive}></div>
@@ -249,7 +252,7 @@ const Checkout: React.FC = () => {
 
                 <div className={styles.cardForm}>
                   
-                  {/* SELECTOR DE TIPO DE TARJETA (NUEVO) */}
+                  {/* SELECTOR DE TIPO DE TARJETA */}
                   <div className={styles.typeSelector}>
                     <label className={`${styles.typeOption} ${paymentType === 'debit' ? styles.selected : ''}`}>
                       <input 
@@ -291,7 +294,7 @@ const Checkout: React.FC = () => {
                   <input type="text" placeholder="Nombre en la tarjeta" className={styles.cardInput} value={cardData.name} onChange={e => setCardData({...cardData, name: e.target.value})} required />
                 </div>
 
-                {/* TOGGLE FACTURACIÓN (RESTAURADO) */}
+                {/* TOGGLE FACTURACIÓN */}
                 <div className={styles.billingToggle}>
                   <label className={styles.checkboxLabel}>
                     <input 
@@ -303,7 +306,7 @@ const Checkout: React.FC = () => {
                   </label>
                 </div>
 
-                {/* FORMULARIO DE FACTURACIÓN (Solo si el checkbox está desmarcado) */}
+                {/* FORMULARIO DE FACTURACIÓN */}
                 {!useShippingAsBilling && (
                   <div className={styles.billingAddressForm}>
                     <h3 className={styles.billingTitle}>DIRECCIÓN DE FACTURACIÓN</h3>

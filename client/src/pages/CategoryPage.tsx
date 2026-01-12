@@ -18,8 +18,10 @@ const CategoryPage: React.FC = () => {
     const fetchCategoryProducts = async () => {
       setLoading(true);
       try {
-        // TIP: En producción, usa una variable de entorno para esta URL
-        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+        // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
+        // Eliminamos la lógica de variables de entorno para asegurar que funcione directo
+        const API_URL = 'https://gymsharkcopyserver.onrender.com';
+        
         const response = await axios.get(`${API_URL}/api/products`, {
           params: {
             category: gender,      
@@ -101,7 +103,7 @@ const CategoryPage: React.FC = () => {
             ))
           ) : (
             <div className={styles.noProducts}>
-               <p>Lo sentimos, no hay stock disponible en {displayTitle} para {gender} en este momento.</p>
+                <p>Lo sentimos, no hay stock disponible en {displayTitle} para {gender} en este momento.</p>
             </div>
           )}
         </main>

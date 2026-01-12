@@ -15,13 +15,15 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Petición al backend de Spring Boot
-      await axios.post('http://localhost:8080/api/auth/register', formData);
+      // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
+      // Antes: http://localhost:8080/api/auth/register
+      await axios.post('https://gymsharkcopyserver.onrender.com/api/auth/register', formData);
+      
       alert("Cuenta creada con éxito. Ahora puedes iniciar sesión.");
       navigate('/login'); // Redirige al login tras el éxito
     } catch (error) {
       console.error("Error al registrarse:", error);
-      alert("Hubo un error al crear la cuenta. Intenta con otro email.");
+      alert("Hubo un error al crear la cuenta. Es posible que el email ya esté en uso o el servidor esté reiniciándose.");
     }
   };
 
@@ -35,12 +37,14 @@ const Register: React.FC = () => {
             placeholder="NOMBRE" 
             required
             onChange={(e) => setFormData({...formData, firstName: e.target.value})} 
+            className={styles.inputField}
           />
           <input 
             type="text" 
             placeholder="APELLIDO" 
             required
             onChange={(e) => setFormData({...formData, lastName: e.target.value})} 
+            className={styles.inputField}
           />
         </div>
         <input 
@@ -48,17 +52,19 @@ const Register: React.FC = () => {
           placeholder="EMAIL" 
           required
           onChange={(e) => setFormData({...formData, email: e.target.value})} 
+          className={styles.inputField}
         />
         <input 
           type="password" 
           placeholder="CONTRASEÑA" 
           required
           onChange={(e) => setFormData({...formData, password: e.target.value})} 
+          className={styles.inputField}
         />
         <button type="submit" className={styles.submitBtn}>UNIRSE AHORA</button>
       </form>
       <p className={styles.switchAuth}>
-        ¿YA TIENES CUENTA? <Link to="/login">INICIAR SESIÓN</Link>
+        ¿YA TIENES CUENTA? <Link to="/login" className={styles.link}>INICIAR SESIÓN</Link>
       </p>
     </div>
   );
