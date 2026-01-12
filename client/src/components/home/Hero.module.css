@@ -1,14 +1,19 @@
+/* 1. IMPORTAR FUENTES: Montserrat (Títulos) y Roboto (Textos) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Roboto:wght@400;500;700&display=swap');
+
 /* --- ESTILOS GENERALES --- */
 .homeWrapper { 
     background-color: #fff; 
     overflow-x: hidden;
+    font-family: 'Roboto', sans-serif; 
+    color: #1f1f1f;
 }
 
 /* --- SECCIÓN HERO PRINCIPAL --- */
 .hero {
     width: 100%;
-    height: 85vh;
-    background-image: url('/image.avif'); /* Asegúrate de que la ruta sea correcta */
+    height: 80vh; 
+    background-image: url('/image.avif'); 
     background-size: cover;
     background-position: center;
     position: relative;
@@ -17,44 +22,50 @@
 .overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
     display: flex;
     align-items: flex-end;
     padding: 60px 4%;
 }
 
 .content {
-    max-width: 800px;
+    max-width: 600px;
 }
 
 .tagline {
     color: white;
-    font-weight: 800;
-    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    display: block;
 }
 
 .title {
-    font-size: 64px;
-    font-weight: 950;
+    font-family: 'Montserrat', sans-serif; 
+    font-size: 48px;       /* Reducido para no ser exagerado */
+    font-weight: 900;      
     color: white;
-    line-height: 1;
-    margin: 10px 0 30px;
+    line-height: 1.1;     
+    margin: 0 0 25px;
     text-transform: uppercase;
+    letter-spacing: -0.5px;
 }
 
 .actions {
     display: flex;
-    gap: 15px;
+    gap: 12px;
 }
 
 .primaryBtn {
-    padding: 16px 32px;
+    padding: 14px 28px;
     background: white;
     color: black;
     border: none;
-    font-weight: 900;
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 800;
     cursor: pointer;
     text-transform: uppercase;
     font-size: 13px;
@@ -67,7 +78,7 @@
 
 /* --- ESTILOS DE SECCIÓN --- */
 .section { 
-    padding: 60px 4%; 
+    padding: 50px 4%; 
 }
 
 .sectionHeader {
@@ -78,21 +89,25 @@
 }
 
 .sectionTitle { 
-    font-size: 24px; 
-    font-weight: 950; 
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;      /* Tamaño equilibrado para títulos como "POPULAR AHORA" */
+    font-weight: 800;     
     margin: 0; 
     text-transform: uppercase; 
+    letter-spacing: -0.2px;
+    color: #000;
 }
 
 .viewAll { 
-    font-size: 14px; 
+    font-size: 13px; 
     font-weight: 700; 
-    color: black; 
+    color: #444; 
     text-decoration: underline; 
     margin-left: 20px; 
+    text-transform: uppercase;
 }
 
-/* --- SLIDERS (CORREGIDO PARA 4 POR FILA) --- */
+/* --- SLIDERS --- */
 .slider {
     display: flex; 
     gap: 15px; 
@@ -107,7 +122,6 @@
 }
 
 .sliderItem { 
-    /* Cálculo: (100% / 4 productos) - (proporción del gap) */
     flex: 0 0 calc(25% - 11.25px); 
     scroll-snap-align: start;
 }
@@ -118,8 +132,8 @@
 }
 
 .controlBtn {
-    width: 36px; 
-    height: 36px; 
+    width: 38px; 
+    height: 38px; 
     border-radius: 50%; 
     border: none;
     background: #f5f5f5; 
@@ -130,31 +144,26 @@
     transition: background 0.2s;
 }
 
-.controlBtn:hover {
-    background: #e5e5e5;
-}
-
-/* --- CATEGORY BANNERS (POPULAR RIGHT NOW) --- */
+/* --- CATEGORY BANNERS --- */
 .categoryBannerGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .popularCategoryCard {
     text-decoration: none;
     color: black;
     display: block;
-    overflow: hidden;
 }
 
 .catImgBox {
     aspect-ratio: 4/5;
     background: #f5f5f5;
     overflow: hidden;
-    margin-bottom: 15px;
-    border-radius: 4px;
+    margin-bottom: 12px;
+    border-radius: 2px;
 }
 
 .catImgBox img {
@@ -164,126 +173,87 @@
     transition: transform 0.5s ease;
 }
 
-.popularCategoryCard:hover .catImgBox img {
-    transform: scale(1.05);
-}
-
 .catName {
-    font-weight: 900;
-    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;   
+    font-size: 16px;      
     text-transform: uppercase;
-    margin: 0;
+    margin: 0 0 3px 0;
 }
 
 .catLink {
     font-size: 12px;
-    text-decoration: underline;
-    font-weight: 700;
+    font-weight: 600;
+    color: #555;
+    text-decoration: none;
+    border-bottom: 1px solid #ccc;
 }
 
-/* --- DUAL SHOP BANNERS (MUJER/HOMBRE) --- */
+/* --- DUAL SHOP BANNERS --- */
 .dualBannerGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    padding: 40px 4%;
+    padding: 30px 4%;
 }
 
 .largeShopCard {
     position: relative;
     aspect-ratio: 1/1;
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
 .largeShopCard img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.8s ease;
-}
-
-.largeShopCard:hover img {
-    transform: scale(1.03);
 }
 
 .shopLabel {
     position: absolute;
-    bottom: 30px;
-    left: 30px;
+    bottom: 25px;
+    left: 25px;
     background: white;
     color: black;
-    padding: 14px 28px;
-    font-weight: 900;
+    padding: 12px 24px;   
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
     text-decoration: none;
     text-transform: uppercase;
-    font-size: 13px;
-    border-radius: 2px;
+    font-size: 12px;      
 }
-
-/* --- TABS --- */
-.filterTabs { display: flex; gap: 10px; margin: 0 0 30px; }
-.tab, .activeTab {
-    padding: 8px 20px; border-radius: 20px; font-weight: 800; font-size: 12px; border: none; cursor: pointer;
-}
-.activeTab { background: black; color: white; }
-.tab { background: #f5f5f5; color: black; }
 
 /* --- GRIDS (TRAINING / GUIDES) --- */
-.trainingGrid, .guideGrid { 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 15px; 
-}
-
-.imgBox, .guideImgBox { 
-    aspect-ratio: 4/5; 
-    background: #f6f6f6; 
-    overflow: hidden; 
-}
-
-.imgBox img, .guideImgBox img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    transition: transform 0.5s ease; 
-}
-
-.imgBox:hover img, .guideImgBox:hover img { 
-    transform: scale(1.03); 
-}
-
 .actName { 
-    font-weight: 950; 
-    margin-top: 15px; 
-    border-bottom: 2px solid black; 
-    display: inline-block; 
-    font-size: 14px; 
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; 
+    margin-top: 12px; 
+    font-size: 14px;      
     text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+}
+
+.actName::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: black;
+    margin-top: 3px;
 }
 
 /* --- RESPONSIVE MEDIA QUERIES --- */
-
-/* Tablets Grandes */
 @media (max-width: 1024px) {
-    .trainingGrid, .guideGrid { grid-template-columns: repeat(2, 1fr); }
-    .sliderItem { flex: 0 0 calc(50% - 10px); } /* 2 cards en tablets */
-    .title { font-size: 48px; }
+    .sliderItem { flex: 0 0 calc(50% - 10px); }
+    .title { font-size: 40px; }
 }
 
-/* Tablets / Móvil Horizontal */
-@media (max-width: 900px) {
-    .categoryBannerGrid { grid-template-columns: 1fr 1fr; }
-    .dualBannerGrid { grid-template-columns: 1fr; }
-    .hero { height: 70vh; }
-}
-
-/* Móviles */
 @media (max-width: 600px) {
-    .sliderItem { flex: 0 0 85%; } /* Una card casi completa y un poco de la siguiente */
-    .categoryBannerGrid { grid-template-columns: 1fr 1fr; }
-    .title { font-size: 36px; }
-    .overlay { padding: 40px 20px; }
-    .primaryBtn { width: 100%; margin-bottom: 10px; }
-    .actions { flex-direction: column; }
+    .sliderItem { flex: 0 0 85%; }
+    .title { font-size: 32px; } 
+    .sectionTitle { font-size: 18px; }
+    .primaryBtn { width: 100%; padding: 12px; text-align: center; }
+    .actions { flex-direction: column; width: 100%; }
 }

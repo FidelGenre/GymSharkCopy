@@ -80,8 +80,8 @@ const Hero: React.FC = () => {
       <section className={styles.hero}>
         <div className={styles.overlay}>
           <div className={styles.content}>
-            <span className={styles.tagline}>Shop new collections for 2026</span>
-            <h2 className={styles.title}>BRAND NEW <br /> STYLES</h2>
+            <span className={styles.tagline}>Compra las nuevas colecciones 2026</span>
+            <h2 className={styles.title}>NUEVOS <br /> ESTILOS</h2>
             <div className={styles.actions}>
               <button className={styles.primaryBtn} onClick={() => handleGenderSwitch('MUJER')}>
                 COMPRAR MUJER
@@ -94,10 +94,10 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 2: BRAND NEW STYLES */}
+      {/* SECCIÓN 2: BRAND NEW STYLES (NUEVOS ESTILOS) */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>BRAND NEW STYLES - {activeGender}</h2>
+          <h2 className={styles.sectionTitle}>NUEVOS ESTILOS - {activeGender}</h2>
           <div className={styles.controls}>
             <button onClick={() => scroll(newStylesRef, 'left')} className={styles.controlBtn}><ChevronLeft size={20}/></button>
             <button onClick={() => scroll(newStylesRef, 'right')} className={styles.controlBtn}><ChevronRight size={20}/></button>
@@ -112,9 +112,9 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 3: POPULAR RIGHT NOW */}
+      {/* SECCIÓN 3: POPULAR RIGHT NOW (POPULAR AHORA) */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>POPULAR RIGHT NOW</h2>
+        <h2 className={styles.sectionTitle}>POPULAR AHORA MISMO</h2>
         <div className={styles.categoryBannerGrid}>
           {getCategories().map((cat) => (
             <Link key={cat.id} to={`/category/${activeGender}/${cat.id}`} className={styles.popularCategoryCard}>
@@ -134,24 +134,24 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 4: DUAL SHOP CARDS */}
+      {/* SECCIÓN 4: DUAL SHOP CARDS (COMPRA POR GÉNERO) */}
       <section className={styles.shopSection}>
         <div className={styles.dualBannerGrid}>
           <div className={styles.largeShopCard}>
-            <img src="/womanimage.avif" alt="Shop Women" />
-            <Link to="/category/MUJER/VER-TODO" className={styles.shopLabel}>SHOP WOMEN</Link>
+            <img src="/womanimage.avif" alt="Comprar Mujer" />
+            <Link to="/category/MUJER/VER-TODO" className={styles.shopLabel}>COMPRAR MUJER</Link>
           </div>
           <div className={styles.largeShopCard}>
-            <img src="/menimage.avif" alt="Shop Men" />
-            <Link to="/category/HOMBRE/VER-TODO" className={styles.shopLabel}>SHOP MEN</Link>
+            <img src="/menimage.avif" alt="Comprar Hombre" />
+            <Link to="/category/HOMBRE/VER-TODO" className={styles.shopLabel}>COMPRAR HOMBRE</Link>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 5: WAIT THERE'S MORE */}
+      {/* SECCIÓN 5: WAIT THERE'S MORE (ESPERA, HAY MÁS) */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>WAIT THERE'S MORE...</h2>
+          <h2 className={styles.sectionTitle}>ESPERA, HAY MÁS...</h2>
           <div className={styles.controls}>
             <button onClick={() => scroll(moreRef, 'left')} className={styles.controlBtn}><ChevronLeft size={20}/></button>
             <button onClick={() => scroll(moreRef, 'right')} className={styles.controlBtn}><ChevronRight size={20}/></button>

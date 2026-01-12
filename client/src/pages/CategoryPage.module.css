@@ -1,15 +1,20 @@
+/* 1. IMPORTAR FUENTES (Montserrat para títulos, Roboto para lectura) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Roboto:wght@400;500;700&display=swap');
+
 .pageContainer {
   max-width: 1600px;
   margin: 0 auto;
-  /* CAMBIO: Reducido de 130px a 100px para subir el contenido */
   padding: 100px 4% 80px; 
+  /* Fuente base para la página */
+  font-family: 'Roboto', sans-serif;
 }
 
 .breadcrumb {
+  font-family: 'Roboto', sans-serif;
   font-size: 11px;
   font-weight: 700;
   color: #707070;
-  margin-bottom: 10px; /* Reducido un poco */
+  margin-bottom: 10px; 
   text-transform: uppercase;
 }
 
@@ -18,19 +23,22 @@
   justify-content: space-between;
   align-items: baseline;
   border-bottom: 1px solid #eee;
-  /* CAMBIO: Reducido padding y margin para pegar más las cards al título */
   padding-bottom: 15px;
   margin-bottom: 25px; 
 }
 
 .title {
+  /* Fuente de impacto estilo Gymshark */
+  font-family: 'Montserrat', sans-serif;
   font-size: 32px;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: -1px;
-  text-transform: uppercase; /* Asegura que el título sea mayúscula como en la imagen */
+  text-transform: uppercase; 
+  color: #000;
 }
 
 .count {
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #666;
@@ -47,10 +55,13 @@
 }
 
 .filterGroup h4 {
+  /* Encabezados de filtros con Montserrat */
+  font-family: 'Montserrat', sans-serif;
   font-size: 12px;
   font-weight: 900;
   margin-bottom: 20px;
   letter-spacing: 1.2px;
+  text-transform: uppercase;
 }
 
 .filterGroup ul {
@@ -59,20 +70,21 @@
 }
 
 .filterGroup li {
+  font-family: 'Roboto', sans-serif;
   font-size: 13px;
-  font-weight: 600; /* Un poco más fino para texto normal */
+  font-weight: 500; 
   padding: 8px 0;
   cursor: pointer;
-  color: #777; /* Color gris por defecto */
+  color: #777; 
   transition: color 0.2s;
 }
 
 /* Clase para el filtro activo */
 .activeFilter {
   color: #000 !important;
-  font-weight: 800 !important; /* Más negrita cuando está activo */
+  font-weight: 800 !important; 
   text-decoration: underline;
-  text-underline-offset: 4px; /* Separa un poco el subrayado */
+  text-underline-offset: 4px; 
 }
 
 .filterGroup li:hover {
@@ -90,6 +102,8 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 120px 0;
+  /* Fuente fuerte para estados de carga */
+  font-family: 'Montserrat', sans-serif;
   font-weight: 900;
   color: #bbb;
   text-transform: uppercase;
@@ -105,6 +119,7 @@
 }
 
 .noProducts p {
+  font-family: 'Roboto', sans-serif;
   font-weight: 700;
   color: #666;
   font-size: 15px;
@@ -112,6 +127,6 @@
 
 @media (max-width: 1024px) {
   .sidebar { display: none; }
-  /* Ajuste para móvil también */
   .pageContainer { padding-top: 80px; } 
+  .title { font-size: 24px; }
 }

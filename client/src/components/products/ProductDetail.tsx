@@ -23,7 +23,6 @@ const ProductDetail: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // Conexión con tu API de Spring Boot
         const response = await axios.get(`http://localhost:8080/api/products/${id}`);
         setProduct(response.data);
       } catch (error) {
@@ -38,14 +37,12 @@ const ProductDetail: React.FC = () => {
   if (loading) return <div className={styles.loader}>Cargando prenda oficial...</div>;
   if (!product) return <div className={styles.loader}>Producto no encontrado.</div>;
 
-  // --- LÓGICA DE IMÁGENES CORREGIDA ---
   const getDisplayImage = (img: string | undefined) => {
     if (!img) return '/imagegym.webp';
     if (img.startsWith('http')) return img;
     return img.startsWith('/') ? img : `/${img}`;
   };
 
-  // --- PROCESAMIENTO DE DATOS (Cast a any para evitar error de TS en subCategory) ---
   const subCat = ((product as any).subCategory || '').trim().toUpperCase();
   const genero = (product.category || 'MUJER').toUpperCase() as 'MUJER' | 'HOMBRE';
 
@@ -63,7 +60,7 @@ const ProductDetail: React.FC = () => {
     addToCart(product, selectedSize);
   };
 
-  // --- MATRICES DE GUÍA DE TALLES ---
+  // --- DATOS DE GUÍA DE TALLES ---
   const braData: any = {
     CM: {
       headers: ['79-82', '84-87', '89-92', '94-97', '99-102', '104-107'],
@@ -113,7 +110,6 @@ const ProductDetail: React.FC = () => {
       <button onClick={() => navigate(-1)} className={styles.backBtn}>← VOLVER A LA TIENDA</button>
 
       <div className={styles.content}>
-        {/* GALERÍA CORREGIDA */}
         <div className={styles.galleryWrapper}>
           <div className={styles.thumbnailList}>
             {(product.images || [product.image] || []).map((img, i) => (
@@ -123,7 +119,7 @@ const ProductDetail: React.FC = () => {
                   className={clsx(styles.thumbBtn, i === selectedImageIndex && styles.activeThumb)} 
                   onClick={() => setSelectedImageIndex(i)}
                 >
-                  <img src={getDisplayImage(img)} alt="thumb" />
+                  <img src={getDisplayImage(img)} alt={`Thumbnail ${i}`} />
                 </button>
               )
             ))}
@@ -138,9 +134,8 @@ const ProductDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* INFORMACIÓN */}
         <div className={styles.infoSection}>
-          <p className={styles.categoryTag}>{product.category} | {(product as any).subCategory}</p>
+          <p className={styles.categoryTag}>{product.category} | {subCat}</p>
           <h1 className={styles.title}>{product.name}</h1>
           <p className={styles.price}>{formatARS(product.price)}</p>
 
@@ -168,7 +163,6 @@ const ProductDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* MODAL DE GUÍA */}
       {showSizeGuide && (
         <div className={styles.modalOverlay} onClick={() => setShowSizeGuide(false)}>
           <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
@@ -176,8 +170,18 @@ const ProductDetail: React.FC = () => {
             <h2 className={styles.modalTitle}>GUÍA DE TALLES {genero}</h2>
             
             <div className={styles.unitToggle}>
-              <button className={clsx(styles.toggleBtn, unit === 'IN' && styles.toggleActive)} onClick={() => setUnit('IN')}>PULGADAS (IN)</button>
-              <button className={clsx(styles.toggleBtn, unit === 'CM' && styles.toggleActive)} onClick={() => setUnit('CM')}>CENTÍMETROS (CM)</button>
+              <button 
+                className={clsx(styles.toggleBtn, unit === 'IN' && styles.toggleActive)} 
+                onClick={() => setUnit('IN')}
+              >
+                PULGADAS (IN)
+              </button>
+              <button 
+                className={clsx(styles.toggleBtn, unit === 'CM' && styles.toggleActive)} 
+                onClick={() => setUnit('CM')}
+              >
+                CENTÍMETROS (CM)
+              </button>
             </div>
 
             {esBra ? (
@@ -203,7 +207,11 @@ const ProductDetail: React.FC = () => {
             ) : esInferior ? (
               <table className={styles.sizeTable}>
                 <thead>
-                  <tr><th>TALLE</th><th>CINTURA</th><th>LARGO PIERNA</th></tr>
+                  <tr>
+                    <th>TALLE</th>
+                    <th>CINTURA</th>
+                    <th>LARGO PIERNA</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {inferiorData[genero][unit].map((item: any) => (

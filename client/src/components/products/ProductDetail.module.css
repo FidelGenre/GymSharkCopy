@@ -1,5 +1,25 @@
-.pageContainer { max-width: 1200px; margin: 0 auto; padding: 100px 20px 60px; background: #fff; }
-.backBtn { background: none; border: none; font-weight: 800; font-size: 12px; cursor: pointer; margin-bottom: 30px; text-decoration: underline; text-transform: uppercase; }
+/* 1. IMPORTAR FUENTES */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Roboto:wght@400;500;700&display=swap');
+
+.pageContainer { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 100px 20px 60px; 
+    background: #fff; 
+    font-family: 'Roboto', sans-serif; /* Fuente base para el contenido */
+}
+
+.backBtn { 
+    background: none; 
+    border: none; 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-weight: 800; 
+    font-size: 12px; 
+    cursor: pointer; 
+    margin-bottom: 30px; 
+    text-decoration: underline; 
+    text-transform: uppercase; 
+}
 
 .content { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; }
 
@@ -13,48 +33,166 @@
 .mainImage { width: 100%; height: 100%; object-fit: cover; }
 
 /* INFO SECTION */
-.categoryTag { font-size: 11px; font-weight: 800; color: #767676; text-transform: uppercase; margin-bottom: 8px; }
-.title { font-size: 32px; font-weight: 950; text-transform: uppercase; margin-bottom: 10px; line-height: 1.1; }
-.price { font-size: 24px; font-weight: 900; margin-bottom: 30px; }
+.categoryTag { 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-size: 11px; 
+    font-weight: 800; 
+    color: #767676; 
+    text-transform: uppercase; 
+    margin-bottom: 8px; 
+}
+
+.title { 
+    font-family: 'Montserrat', sans-serif; /* Estilo de gran impacto */
+    font-size: 26px; 
+    font-weight: 550; 
+    text-transform: uppercase; 
+    margin-bottom: 10px; 
+    line-height: 1.1; 
+}
+
+.price { 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-size: 24px; 
+    font-weight: 700; 
+    margin-bottom: 30px; 
+}
 
 /* SELECTOR DE TALLES */
 .sizeHeader { display: flex; justify-content: space-between; margin-bottom: 15px; }
-.sizeLabel { font-weight: 900; font-size: 12px; }
-.guideBtn { background: none; border: none; text-decoration: underline; font-size: 12px; font-weight: 800; cursor: pointer; }
+
+.sizeLabel { 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-weight: 900; 
+    font-size: 12px; 
+}
+
+.guideBtn { 
+    background: none; 
+    border: none; 
+    font-family: 'Roboto', sans-serif; /* */
+    text-decoration: underline; 
+    font-size: 12px; 
+    font-weight: 800; 
+    cursor: pointer; 
+}
+
 .sizeGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
-.sizeBtn { padding: 18px; background: white; border: 1px solid #ddd; font-weight: 900; cursor: pointer; font-size: 13px; }
+
+.sizeBtn { 
+    font-family: 'Montserrat', sans-serif; /* */
+    padding: 18px; 
+    background: white; 
+    border: 1px solid #ddd; 
+    font-weight: 900; 
+    cursor: pointer; 
+    font-size: 13px; 
+}
+
 .activeSize { background: black; color: white; border-color: black; }
-.addBtn { width: 100%; padding: 22px; background: black; color: white; border: none; font-weight: 950; font-size: 14px; cursor: pointer; text-transform: uppercase; margin-bottom: 20px; transition: 0.3s; }
+
+.addBtn { 
+    width: 100%; 
+    padding: 22px; 
+    background: black; 
+    color: white; 
+    border: none; 
+    font-family: 'Montserrat', sans-serif; /* Acción principal */
+    font-weight: 950; 
+    font-size: 14px; 
+    cursor: pointer; 
+    text-transform: uppercase; 
+    margin-bottom: 20px; 
+    transition: 0.3s; 
+}
+
 .addBtn:hover { background: #333; }
 
 /* MODAL GUÍA DE TALLES */
 .modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
 .modalContent { background: white; width: 100%; max-width: 650px; padding: 50px 40px; position: relative; text-align: center; }
 .closeModal { position: absolute; top: 25px; right: 25px; background: none; border: none; cursor: pointer; }
-.modalTitle { font-size: 26px; font-weight: 950; margin-bottom: 25px; text-transform: uppercase; }
+
+.modalTitle { 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-size: 26px; 
+    font-weight: 950; 
+    margin-bottom: 25px; 
+    text-transform: uppercase; 
+}
 
 .unitToggle { display: inline-flex; background: #f2f2f2; padding: 4px; border-radius: 50px; margin-bottom: 30px; }
-.toggleBtn { border: none; padding: 10px 20px; border-radius: 50px; font-weight: 800; font-size: 11px; cursor: pointer; background: transparent; }
+
+.toggleBtn { 
+    border: none; 
+    font-family: 'Montserrat', sans-serif; /* */
+    padding: 10px 20px; 
+    border-radius: 50px; 
+    font-weight: 800; 
+    font-size: 11px; 
+    cursor: pointer; 
+    background: transparent; 
+}
+
 .toggleActive { background: #53565a; color: white; }
 
 /* TABLAS ESTÁNDAR */
 .sizeTable { width: 100%; border-collapse: collapse; margin-top: 10px; }
-.sizeTable th { font-size: 11px; font-weight: 900; padding: 15px; color: #000; text-align: center; border-bottom: 1px solid #eee; text-transform: uppercase; }
-.sizeTable td { padding: 15px; font-size: 13px; border-bottom: 1px solid #f6f6f6; }
+
+.sizeTable th { 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-size: 11px; 
+    font-weight: 900; 
+    padding: 15px; 
+    color: #000; 
+    text-align: center; 
+    border-bottom: 1px solid #eee; 
+    text-transform: uppercase; 
+}
+
+.sizeTable td { 
+    font-family: 'Roboto', sans-serif; /* Lectura clara de medidas */
+    padding: 15px; 
+    font-size: 13px; 
+    border-bottom: 1px solid #f6f6f6; 
+}
+
 .boldCell { font-weight: 950; }
 
-/* MATRIZ BRASIER (image_6716a3) */
+/* MATRIZ BRASIER */
 .matrixWrapper { overflow-x: auto; margin-top: 10px; }
-.tableLabel { font-size: 11px; font-weight: 950; text-align: center; margin-bottom: 15px; color: #000; }
+
+.tableLabel { 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-size: 11px; 
+    font-weight: 950; 
+    text-align: center; 
+    margin-bottom: 15px; 
+    color: #000; 
+}
+
 .braTable { width: 100%; border-collapse: collapse; font-size: 12px; }
 .braTable th, .braTable td { border: 1px solid #e5e5e5; padding: 12px 8px; text-align: center; }
-.braTable th { background: #fdfdfd; font-weight: 900; font-size: 10px; }
-.underbustCol { font-weight: 950; background: #fafafa; border-right: 2px solid #eee; }
+
+.braTable th { 
+    font-family: 'Montserrat', sans-serif; /* */
+    background: #fdfdfd; 
+    font-weight: 900; 
+    font-size: 10px; 
+}
+
+.underbustCol { 
+    font-family: 'Montserrat', sans-serif; /* */
+    font-weight: 950; 
+    background: #fafafa; 
+    border-right: 2px solid #eee; 
+}
+
 .emptyCell { border: none !important; }
 
 @media (max-width: 900px) {
-  .content { grid-template-columns: 1fr; }
-  .galleryWrapper { flex-direction: column-reverse; }
-  .thumbnailList { flex-direction: row; justify-content: center; }
-  .modalContent { padding: 40px 20px; }
+    .content { grid-template-columns: 1fr; }
+    .galleryWrapper { flex-direction: column-reverse; }
+    .thumbnailList { flex-direction: row; justify-content: center; }
+    .modalContent { padding: 40px 20px; }
 }

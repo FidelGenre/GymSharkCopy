@@ -1,9 +1,18 @@
+/* 1. IMPORTAR LA FUENTE ROBOTO */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* =========================================
+   ESTRUCTURA PRINCIPAL (HEADER)
+   ========================================= */
+
 .header {
   position: sticky;
   top: 0;
   width: 100%;
   background-color: white;
   z-index: 1000;
+  /* Aplicamos la fuente base para todo el header */
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .navbar {
@@ -39,22 +48,35 @@
   color: #000;
 }
 
+/* =========================================
+   NAVEGACIÓN DE ESCRITORIO (ESTILO NUEVO)
+   ========================================= */
+
 .desktopNav {
   display: flex;
-  gap: 20px;
+  gap: 30px; /* Un poco más de espacio entre links */
 }
 
 .navLink {
   background: none;
   border: none;
-  font-family: inherit;
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: 1px;
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 400;     /* Mantenemos la letra fina */
+  font-size: 14px;      /* <--- CAMBIO: De 16px a 14px */
+  letter-spacing: 0.5px; /* Un pelín de aire para que se lea bien en tamaño pequeño */
+  color: #2e2e2e;
   cursor: pointer;
   padding: 30px 0;
-  color: #000;
+  transition: color 0.2s ease;
 }
+
+.navLink:hover {
+  color: #757575; /* Efecto suave al pasar el mouse */
+}
+
+/* =========================================
+   LOGO Y PARTE DERECHA
+   ========================================= */
 
 .logo {
   flex: 1;
@@ -91,7 +113,7 @@
   display: flex;
 }
 
-/* Estilo para el círculo del usuario logueado */
+/* Círculo del usuario */
 .userIconWrapper {
   display: flex;
   align-items: center;
@@ -106,6 +128,7 @@
   background: #ebebeb;
 }
 
+/* Carrito y Badge */
 .cartBtn {
   position: relative;
 }
@@ -117,7 +140,7 @@
   background-color: #000;
   color: #fff;
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700; /* Reducido un poco el peso */
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -126,6 +149,10 @@
   justify-content: center;
   transform: translate(20%, -20%);
 }
+
+/* =========================================
+   BÚSQUEDA MÓVIL
+   ========================================= */
 
 .mobileSearchRow {
   display: none;
@@ -137,17 +164,18 @@
   height: 45px;
   background-color: #f5f5f5;
   border: none;
-  border-radius: 50px;
+  border-radius: 4px; /* Más cuadrado como Gymshark moderno, o usa 50px si prefieres redondo */
   display: flex;
   align-items: center;
   padding: 0 20px;
   gap: 12px;
   color: #767676;
   font-size: 14px;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* =========================================
-   ESTILOS MINIMALISTAS (Login, Profile, etc.)
+   ESTILOS MINIMALISTAS (Login, Profile)
    ========================================= */
 
 .minimalHeader {
@@ -160,6 +188,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  font-family: 'Roboto', sans-serif;
 }
 
 .minimalContainer {
@@ -180,7 +209,7 @@
   gap: 8px;
   padding: 0;
   transition: opacity 0.2s;
-  width: 60px; /* Ancho fijo para equilibrar con el espaciador derecho */
+  width: 60px;
 }
 
 .backButton:hover {
@@ -188,11 +217,11 @@
 }
 
 .backText {
-  font-weight: 700;
+  font-weight: 500; /* Regular/Medium */
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  display: none; /* Oculto en móviles muy pequeños */
+  display: none;
 }
 
 .logoMinimal {
@@ -207,7 +236,10 @@
   }
 }
 
-/* --- MEDIA QUERIES GENERALES --- */
+/* =========================================
+   MEDIA QUERIES (RESPONSIVE)
+   ========================================= */
+
 @media (max-width: 1024px) {
   .topRow {
     height: 60px;
