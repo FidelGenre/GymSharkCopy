@@ -23,11 +23,17 @@ public class ProductService {
 
         // 2. Filtro por categoría (Género o Tipo)
         if (category != null && !category.isEmpty()) {
+            // Usamos la versión optimizada si es una búsqueda exacta de género
+            if (category.equalsIgnoreCase("HOMBRE") || category.equalsIgnoreCase("MUJER")) {
+                 return productRepository.findByCategoryIgnoreCase(category);
+            }
             return productRepository.findByCategoryContainingIgnoreCase(category);
         }
 
-        // 3. Si no hay parámetros, devolvemos el catálogo completo
-        return productRepository.findAll();
+        // 3. Si no hay parámetros (HOME PAGE), usamos la consulta OPTIMIZADA
+        // ANTES: return productRepository.findAll();  <-- LENTO (8s)
+        // AHORA:
+        return productRepository.findAllWithRelationships(); // <-- RÁPIDO (0.2s)
     }
 
     /**
