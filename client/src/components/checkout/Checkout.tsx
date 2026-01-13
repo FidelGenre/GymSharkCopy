@@ -41,7 +41,7 @@ const Checkout: React.FC = () => {
     if (paymentType === 'credit') {
        // 1, 3 y 6 son Sin Interés
        
-       // 🔥 INTERESES MÁS ALTOS AQUÍ:
+       // 🔥 INTERESES ALTOS:
        if (installments === 9) interestAmount = baseTotalWithShipping * 0.40; // 40% recargo
        if (installments === 12) interestAmount = baseTotalWithShipping * 0.75; // 75% recargo
     }
@@ -99,11 +99,40 @@ const Checkout: React.FC = () => {
     name: ''
   });
 
+  // --- MANEJADORES DE INPUTS DE TARJETA ---
+
+  // 1. Formato Tarjeta (xxxx xxxx xxxx xxxx)
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length > 16) value = value.slice(0, 16);
     const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 ');
     setCardData({ ...cardData, number: formattedValue });
+  };
+
+  // 2. 🟢 NUEVO: Formato Vencimiento (MM/YY)
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Solo permitimos números
+    let value = e.target.value.replace(/\D/g, '');
+    
+    // Máximo 4 números (MMYY)
+    if (value.length > 4) value = value.slice(0, 4);
+
+    // Agregamos la barra automáticamente después del mes
+    if (value.length >= 3) {
+      value = `${value.slice(0, 2)}/${value.slice(2)}`;
+    }
+
+    setCardData({ ...cardData, expiry: value });
+  };
+
+  // 3. 🟢 NUEVO: Formato CVV (Solo 3 números)
+  const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Solo números
+    const value = e.target.value.replace(/\D/g, '');
+    // Máximo 3 dígitos estrictos
+    if (value.length <= 3) {
+      setCardData({ ...cardData, cvv: value });
+    }
   };
 
   useEffect(() => {
@@ -290,16 +319,38 @@ const Checkout: React.FC = () => {
                     />
                     <Lock size={16} className={styles.lockIcon} />
                   </div>
+
                   <div className={styles.inputRow}>
-                    <input type="text" placeholder="Vencimiento (MM / YY)" className={styles.cardInput} value={cardData.expiry} onChange={e => setCardData({...cardData, expiry: e.target.value})} required />
+                    
+                    {/* INPUT VENCIMIENTO MM/YY */}
+                    <input 
+                        type="text" 
+                        placeholder="MM / YY" 
+                        className={styles.cardInput} 
+                        maxLength={5} // 2 num + 1 barra + 2 num
+                        value={cardData.expiry} 
+                        onChange={handleExpiryChange} 
+                        required 
+                    />
+
                     <div className={styles.inputWrapper}>
-                      <input type="text" placeholder="Código seg." className={styles.cardInput} maxLength={4} value={cardData.cvv} onChange={e => setCardData({...cardData, cvv: e.target.value})} required />
+                      {/* INPUT CÓDIGO SEGURIDAD (3 NÚMEROS) */}
+                      <input 
+                        type="text" 
+                        placeholder="CVV" 
+                        className={styles.cardInput} 
+                        maxLength={3} 
+                        value={cardData.cvv} 
+                        onChange={handleCvvChange} 
+                        required 
+                      />
                       <Info size={16} className={styles.lockIcon} />
                     </div>
                   </div>
+
                   <input type="text" placeholder="Nombre en la tarjeta" className={styles.cardInput} value={cardData.name} onChange={e => setCardData({...cardData, name: e.target.value})} required />
 
-                  {/* 🟢 NUEVO: SELECTOR DE CUOTAS (Solo si es Crédito) */}
+                  {/* SELECTOR DE CUOTAS (Solo si es Crédito) */}
                   {paymentType === 'credit' && (
                     <div className={styles.installmentsWrapper}>
                       <label className={styles.installmentsLabel}>Elegir plan de cuotas:</label>
@@ -313,7 +364,7 @@ const Checkout: React.FC = () => {
                           <option value={3}>3 cuotas de {formatARS(baseTotalWithShipping/3)} (Sin interés)</option>
                           <option value={6}>6 cuotas de {formatARS(baseTotalWithShipping/6)} (Sin interés)</option>
                           
-                          {/* Cuotas con Interés ALTO (40% y 75%) */}
+                          {/* Cuotas con Interés ALTO */}
                           <option value={9}>
                             9 cuotas de {formatARS((baseTotalWithShipping * 1.40)/9)} (Total: {formatARS(baseTotalWithShipping * 1.40)})
                           </option>
