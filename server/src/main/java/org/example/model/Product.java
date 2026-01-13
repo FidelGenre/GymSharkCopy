@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,12 +29,12 @@ public class Product {
 
     private String currency;
 
-    // 🚀 OPTIMIZACIÓN DE VELOCIDAD:
-    // Usamos Set en lugar de List para permitir "JOIN FETCH" múltiples
-    // Esto reduce las consultas a la base de datos de 51 a solo 1.
+    // Usamos SET para permitir la carga rápida (JOIN FETCH)
     @ElementCollection
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "image_url")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<String> images = new HashSet<>();
 
     private String category;    // HOMBRE, MUJER
@@ -43,9 +45,10 @@ public class Product {
     private String tag;         // NEW, BEST SELLER
     private String description;
 
-    // 🚀 OPTIMIZACIÓN DE VELOCIDAD:
     @ElementCollection
     @CollectionTable(name = "product_sizes", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "size")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<String> sizes = new HashSet<>();
 }
