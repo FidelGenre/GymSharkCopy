@@ -12,7 +12,7 @@ const Checkout: React.FC = () => {
   const { cartItems, cartTotal, clearCart } = useCart();
   const { user } = useAuth();
 
-  const shippingCost = 15500;
+  const shippingCost = 6000;
   
   // NUEVO: Estado para tipo de pago (Crédito o Débito)
   const [paymentType, setPaymentType] = useState<'credit' | 'debit'>('debit');

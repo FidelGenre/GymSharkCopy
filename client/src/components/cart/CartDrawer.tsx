@@ -22,7 +22,7 @@ const CartDrawer: React.FC = () => {
   const subTotal = cartItems?.reduce((acc, item) => acc + (item.price * item.quantity), 0) || 0;
   
   // Ajustamos el envío a un valor coherente en Pesos (ej. 15.000 ARS)
-  const shipping = 15000; 
+  const shipping = 6000; 
   const total = subTotal + shipping;
 
   const handleApplyCode = (e: React.FormEvent) => {
