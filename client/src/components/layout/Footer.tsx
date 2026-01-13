@@ -6,7 +6,7 @@ import styles from './Footer.module.css';
 interface TooltipProps {
   label: string;
   text: string;
-  variant?: 'standard' | 'legal'; // Nueva prop opcional
+  variant?: 'standard' | 'legal'; // Prop para diferenciar estilos
 }
 
 const FooterTooltip: React.FC<TooltipProps> = ({ label, text, variant = 'standard' }) => {
@@ -14,7 +14,7 @@ const FooterTooltip: React.FC<TooltipProps> = ({ label, text, variant = 'standar
   
   const toggle = () => setIsOpen(!isOpen);
 
-  // Elegimos la clase CSS según la variante
+  // Si es 'legal', usa el estilo pequeño de la barra inferior. Si es 'standard', el estilo de link normal.
   const triggerClass = variant === 'legal' ? styles.legalTrigger : styles.fakeLink;
 
   return (
@@ -48,9 +48,9 @@ const Footer: React.FC = () => {
     <footer className={styles.footer}>
       <div className={styles.container}>
         
-        {/* ... (Todo el contenido de .grid se mantiene igual) ... */}
         <div className={styles.grid}>
-          {/* Columna 1 */}
+          
+          {/* Columna 1: Ayuda */}
           <div className={styles.column}>
             <h4 className={styles.title}>AYUDA</h4>
             <ul className={styles.list}>
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Columna 2 */}
+          {/* Columna 2: Mi Cuenta */}
           <div className={styles.column}>
             <h4 className={styles.title}>MI CUENTA</h4>
             <ul className={styles.list}>
@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Columna 3 */}
+          {/* Columna 3: Acerca De */}
           <div className={styles.column}>
             <h4 className={styles.title}>ACERCA DE</h4>
             <ul className={styles.list}>
@@ -110,7 +110,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Columna 4 */}
+          {/* Columna 4: Newsletter + CONTACTO */}
           <div className={styles.column}>
             <h4 className={styles.title}>ÚNETE A LA FAMILIA</h4>
             <p className={styles.text}>Sé el primero en enterarte de nuevos lanzamientos y ofertas.</p>
@@ -148,23 +148,27 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* ... Fin del grid ... */}
 
-        {/* --- BARRA INFERIOR MODIFICADA --- */}
+        {/* --- BARRA INFERIOR --- */}
         <div className={styles.bottomBar}>
           <p>© 2026 | GYMSHARK</p>
           <div className={styles.legalLinks}>
-            {/* Términos lo dejamos como link normal si quieres, o cámbialo a Tooltip también */}
-            <Link to="/terms">Términos</Link>
             
-            {/* PRIVACIDAD AHORA ES POP-UP */}
+            {/* TÉRMINOS (Pop-up) */}
+            <FooterTooltip 
+              label="Términos" 
+              variant="legal"
+              text="Al navegar y realizar compras en nuestro sitio, aceptas nuestros términos y condiciones generales de uso y venta."
+            />
+
+            {/* PRIVACIDAD (Pop-up) */}
             <FooterTooltip 
               label="Privacidad" 
               variant="legal"
               text="Tus datos están seguros. No compartimos información personal con terceros sin tu consentimiento explícito. Cumplimos con GDPR."
             />
             
-            {/* COOKIES AHORA ES POP-UP */}
+            {/* COOKIES (Pop-up) */}
             <FooterTooltip 
               label="Cookies" 
               variant="legal"
@@ -172,7 +176,6 @@ const Footer: React.FC = () => {
             />
           </div>
         </div>
-
       </div>
     </footer>
   );
