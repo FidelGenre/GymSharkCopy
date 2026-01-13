@@ -3,7 +3,7 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Lock, ChevronDown, Info } from 'lucide-react';
+import { Lock, ChevronDown, Info, CreditCard } from 'lucide-react';
 import { formatARS } from '../../utils/formatCurrency';
 import styles from './Checkout.module.css';
 
@@ -14,35 +14,39 @@ const Checkout: React.FC = () => {
 
   const shippingCost = 6000;
   
-  // NUEVO: Estado para tipo de pago (Crédito o Débito)
   const [paymentType, setPaymentType] = useState<'credit' | 'debit'>('debit');
-  
-  // Mantenemos esto: Checkbox para la dirección de facturación
   const [useShippingAsBilling, setUseShippingAsBilling] = useState(true);
 
-  // --- LÓGICA DE DESCUENTO ---
-  // Calcula el total dinámicamente según la tarjeta seleccionada
-  const calculateTotals = () => {
-    let subtotal = cartTotal;
-    let discount = 0;
+  // NUEVO: Estado para las cuotas (Por defecto 1 pago)
+  const [installments, setInstallments] = useState<number>(1);
 
-    // Ejemplo: 15% de descuento si es Crédito
+  // --- LÓGICA DE INTERESES Y CUOTAS ---
+  const calculateTotals = () => {
+    const baseTotal = cartTotal + shippingCost;
+    let interestRate = 0;
+
+    // Solo aplicamos lógica de cuotas si es Tarjeta de Crédito
     if (paymentType === 'credit') {
-      discount = subtotal * 0.15;
-      subtotal = subtotal - discount;
+      if (installments === 9) interestRate = 0.15; // 15% de interés para 9 cuotas
+      if (installments === 12) interestRate = 0.30; // 30% de interés para 12 cuotas
+      // 3 y 6 cuotas tienen rate 0 (Sin interés)
     }
+
+    const interestAmount = baseTotal * interestRate;
+    const finalTotal = baseTotal + interestAmount;
+    const amountPerInstallment = finalTotal / installments;
 
     return {
       subtotalOriginal: cartTotal,
-      discountAmount: discount,
-      subtotalFinal: subtotal,
-      totalToPay: subtotal + shippingCost
+      interestAmount,
+      totalToPay: finalTotal,
+      amountPerInstallment
     };
   };
 
-  const {  totalToPay, discountAmount } = calculateTotals();
+  const { totalToPay, interestAmount, amountPerInstallment } = calculateTotals();
 
-  // 1. Estado para dirección de envío
+  // Estados de formularios (Igual que antes)
   const [formData, setFormData] = useState({
     email: user?.email || '',
     firstName: user?.firstName || '',
@@ -56,7 +60,6 @@ const Checkout: React.FC = () => {
     country: 'Argentina'
   });
 
-  // 2. Estado para dirección de facturación
   const [billingData, setBillingData] = useState({
     firstName: '',
     lastName: '',
@@ -92,6 +95,13 @@ const Checkout: React.FC = () => {
     }
   }, [user]);
 
+  // Resetear cuotas a 1 si cambia a débito
+  useEffect(() => {
+    if (paymentType === 'debit') {
+      setInstallments(1);
+    }
+  }, [paymentType]);
+
   const provincias = [
     "CABA", "Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba", "Corrientes", 
     "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza", "Misiones", 
@@ -101,20 +111,18 @@ const Checkout: React.FC = () => {
 
   const handleFinishPurchase = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Decidir dirección de facturación basada en el checkbox
     const billingSource = useShippingAsBilling ? formData : billingData;
 
     try {
       const paymentPayload = {
-        // Datos de Tarjeta y Monto Final (con descuento aplicado)
         email: formData.email,
         cardNumber: cardData.number.replace(/\s/g, ''),
         cardHolderName: cardData.name,
         expiryDate: cardData.expiry,
         cvv: cardData.cvv,
         amount: totalToPay, 
-        paymentType: paymentType, // Enviamos el tipo para registro
+        paymentType: paymentType,
+        installments: installments, // Enviamos cantidad de cuotas al backend
 
         // Datos de Entrega
         firstName: formData.firstName,
@@ -135,32 +143,25 @@ const Checkout: React.FC = () => {
         billingProvince: billingSource.province
       };
 
-      // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
       const res = await axios.post('https://gymsharkcopyserver.onrender.com/api/payments/manual', paymentPayload);
 
       if (res.status === 200 || res.status === 201) {
-        // Al crear la orden, guardamos el precio real que pagó el usuario por ítem
         const orderData = {
           userId: user?.id || null,
           totalAmount: totalToPay,
           status: "COMPLETADO",
-          items: cartItems?.map(item => {
-            // Si hubo descuento, prorrateamos el precio del item
-            const finalItemPrice = paymentType === 'credit' ? item.price * 0.85 : item.price;
-            return {
+          items: cartItems?.map(item => ({
               productId: item.id,
               name: item.name,
               size: item.selectedSize,
               quantity: item.quantity,
-              price: finalItemPrice 
-            };
-          })
+              price: item.price // Precio base del producto
+            }))
         };
 
-        // 🟢 CORREGIDO: Apunta a tu servidor en Render (HTTPS)
         await axios.post('https://gymsharkcopyserver.onrender.com/api/orders', orderData);
         
-        alert("¡Compra realizada con éxito!");
+        alert(`¡Compra realizada con éxito! Pagaste en ${installments} cuota(s).`);
         clearCart();
         navigate('/orders'); 
       }
@@ -192,6 +193,7 @@ const Checkout: React.FC = () => {
             {/* SECCIÓN ENTREGA */}
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>ENTREGA</h2>
+              {/* ... (Resto de inputs de dirección igual que antes) ... */}
               <div className={styles.selectWrapper}>
                 <select className={styles.inputField} disabled value="Argentina">
                   <option value="Argentina">Argentina</option>
@@ -235,48 +237,38 @@ const Checkout: React.FC = () => {
               <h2 className={styles.sectionTitle}>PAGO</h2>
               <div className={styles.paymentContainer}>
                 
-                {/* HEADER CON IMÁGENES */}
                 <div className={styles.paymentHeader}>
                   <div className={styles.paymentType}>
                     <div className={styles.radioActive}></div>
                     <span>Tarjeta de Crédito/Débito</span>
                   </div>
                   <div className={styles.cardLogos}>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className={styles.visaLogo}/>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" />
-                    <img src="unnamed (5).jpg" alt="American Express" />
-                    <img src="unnamed.jpg" alt="Naranja" />
-                    <img src="unnamed (1).jpg" alt="Maestro" />
+                    <CreditCard size={24} />
                   </div>
                 </div>
 
                 <div className={styles.cardForm}>
                   
-                  {/* SELECTOR DE TIPO DE TARJETA */}
+                  {/* SELECTOR TIPO TARJETA */}
                   <div className={styles.typeSelector}>
                     <label className={`${styles.typeOption} ${paymentType === 'debit' ? styles.selected : ''}`}>
                       <input 
-                        type="radio" 
-                        name="paymentType" 
-                        value="debit" 
-                        checked={paymentType === 'debit'}
-                        onChange={() => setPaymentType('debit')}
+                        type="radio" name="paymentType" value="debit" 
+                        checked={paymentType === 'debit'} onChange={() => setPaymentType('debit')}
                       />
                       <span>Débito</span>
                     </label>
 
                     <label className={`${styles.typeOption} ${paymentType === 'credit' ? styles.selected : ''}`}>
                       <input 
-                        type="radio" 
-                        name="paymentType" 
-                        value="credit" 
-                        checked={paymentType === 'credit'}
-                        onChange={() => setPaymentType('credit')}
+                        type="radio" name="paymentType" value="credit" 
+                        checked={paymentType === 'credit'} onChange={() => setPaymentType('credit')}
                       />
-                      <span>Crédito <small style={{color: '#2ecc71', fontWeight: 'bold'}}>(15% OFF)</small></span>
+                      <span>Crédito</span>
                     </label>
                   </div>
 
+                  {/* DATOS TARJETA */}
                   <div className={styles.inputWrapper}>
                     <input 
                       type="text" placeholder="Número de tarjeta" className={styles.cardInput} 
@@ -287,42 +279,62 @@ const Checkout: React.FC = () => {
                   <div className={styles.inputRow}>
                     <input type="text" placeholder="Vencimiento (MM / YY)" className={styles.cardInput} value={cardData.expiry} onChange={e => setCardData({...cardData, expiry: e.target.value})} required />
                     <div className={styles.inputWrapper}>
-                      <input type="text" placeholder="Código seg." className={styles.cardInput} maxLength={4} value={cardData.cvv} onChange={e => setCardData({...cardData, cvv: e.target.value})} required />
+                      <input type="text" placeholder="CVV" className={styles.cardInput} maxLength={4} value={cardData.cvv} onChange={e => setCardData({...cardData, cvv: e.target.value})} required />
                       <Info size={16} className={styles.lockIcon} />
                     </div>
                   </div>
                   <input type="text" placeholder="Nombre en la tarjeta" className={styles.cardInput} value={cardData.name} onChange={e => setCardData({...cardData, name: e.target.value})} required />
+
+                  {/* 🟢 NUEVO: SELECTOR DE CUOTAS (Solo si es Crédito) */}
+                  {paymentType === 'credit' && (
+                    <div className={styles.installmentsWrapper}>
+                      <label className={styles.installmentsLabel}>Seleccionar Cuotas:</label>
+                      <div className={styles.selectWrapper}>
+                        <select 
+                          className={styles.inputField} 
+                          value={installments} 
+                          onChange={(e) => setInstallments(Number(e.target.value))}
+                        >
+                          <option value={1}>1 pago de {formatARS(cartTotal + shippingCost)} (Sin interés)</option>
+                          <option value={3}>3 cuotas de {formatARS((cartTotal + shippingCost)/3)} (Sin interés)</option>
+                          <option value={6}>6 cuotas de {formatARS((cartTotal + shippingCost)/6)} (Sin interés)</option>
+                          
+                          {/* Cuotas con Interés simulado */}
+                          <option value={9}>
+                            9 cuotas de {formatARS(((cartTotal + shippingCost) * 1.15)/9)} (Con interés)
+                          </option>
+                          <option value={12}>
+                            12 cuotas de {formatARS(((cartTotal + shippingCost) * 1.30)/12)} (Con interés)
+                          </option>
+                        </select>
+                        <ChevronDown className={styles.selectIcon} size={16} />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* TOGGLE FACTURACIÓN */}
                 <div className={styles.billingToggle}>
                   <label className={styles.checkboxLabel}>
                     <input 
-                      type="checkbox" 
-                      checked={useShippingAsBilling} 
+                      type="checkbox" checked={useShippingAsBilling} 
                       onChange={() => setUseShippingAsBilling(!useShippingAsBilling)} 
                     />
                     <span>Usar dirección de envío como dirección de facturación</span>
                   </label>
                 </div>
 
-                {/* FORMULARIO DE FACTURACIÓN */}
                 {!useShippingAsBilling && (
                   <div className={styles.billingAddressForm}>
                     <h3 className={styles.billingTitle}>DIRECCIÓN DE FACTURACIÓN</h3>
-                    <div className={styles.selectWrapper}>
-                      <select className={styles.inputField} disabled value="Argentina">
-                        <option value="Argentina">Argentina</option>
-                      </select>
-                      <ChevronDown className={styles.selectIcon} size={16} />
-                    </div>
-                    <div className={styles.inputRow}>
+                    {/* ... (Formulario de facturación igual que antes) ... */}
+                    <input type="text" placeholder="Dirección" className={styles.inputField} value={billingData.address} onChange={e => setBillingData({...billingData, address: e.target.value})} />
+                     <div className={styles.inputRow}>
                       <input type="text" placeholder="Nombre" className={styles.inputField} value={billingData.firstName} onChange={e => setBillingData({...billingData, firstName: e.target.value})} />
                       <input type="text" placeholder="Apellido" className={styles.inputField} value={billingData.lastName} onChange={e => setBillingData({...billingData, lastName: e.target.value})} />
                     </div>
-                    <input type="text" placeholder="Dirección" className={styles.inputField} value={billingData.address} onChange={e => setBillingData({...billingData, address: e.target.value})} />
                     <div className={styles.inputRowThree}>
-                      <input type="text" placeholder="Código postal" className={styles.inputField} value={billingData.postalCode} onChange={e => setBillingData({...billingData, postalCode: e.target.value})} />
+                      <input type="text" placeholder="CP" className={styles.inputField} value={billingData.postalCode} onChange={e => setBillingData({...billingData, postalCode: e.target.value})} />
                       <input type="text" placeholder="Ciudad" className={styles.inputField} value={billingData.city} onChange={e => setBillingData({...billingData, city: e.target.value})} />
                       <div className={styles.selectWrapper}>
                         <select className={styles.inputField} value={billingData.province} onChange={e => setBillingData({...billingData, province: e.target.value})}>
@@ -342,50 +354,50 @@ const Checkout: React.FC = () => {
           </form>
         </div>
 
+        {/* RESUMEN DERECHA */}
         <aside className={styles.rightColumn}>
           <div className={styles.itemList}>
-            {cartItems?.map((item) => {
-              const rawImg = item.image || (item.images && item.images[0]) || '';
-              const displayImage = rawImg.startsWith('http') ? rawImg : rawImg.startsWith('/') ? rawImg : `/${rawImg}`;
-              
-              // Precio visual para el resumen
-              const unitPrice = paymentType === 'credit' ? item.price * 0.85 : item.price;
-
-              return (
-                <div key={`${item.id}-${item.selectedSize}`} className={styles.summaryItem}>
-                  <div className={styles.imgContainer}>
-                    <img 
-                      src={displayImage} 
-                      alt={item.name} 
-                      onError={(e) => { (e.target as HTMLImageElement).src = '/imagegym.webp'; }}
-                    />
-                    <span className={styles.qtyBadge}>{item.quantity}</span>
-                  </div>
-                  <div className={styles.itemInfo}>
-                    <p className={styles.itemName}>{item.name}</p>
-                    <p className={styles.itemSize}>{item.selectedSize}</p>
-                    {paymentType === 'credit' && <span className={styles.discountTag}>15% OFF aplicado</span>}
-                  </div>
-                  <p className={styles.itemPrice}>{formatARS(unitPrice * item.quantity)}</p>
+            {cartItems?.map((item) => (
+              <div key={`${item.id}-${item.selectedSize}`} className={styles.summaryItem}>
+                <div className={styles.imgContainer}>
+                  <img 
+                    src={item.image || (item.images && item.images[0]) || ''} 
+                    alt={item.name} 
+                    onError={(e) => { (e.target as HTMLImageElement).src = '/imagegym.webp'; }}
+                  />
+                  <span className={styles.qtyBadge}>{item.quantity}</span>
                 </div>
-              );
-            })}
+                <div className={styles.itemInfo}>
+                  <p className={styles.itemName}>{item.name}</p>
+                  <p className={styles.itemSize}>{item.selectedSize}</p>
+                </div>
+                <p className={styles.itemPrice}>{formatARS(item.price * item.quantity)}</p>
+              </div>
+            ))}
           </div>
 
           <div className={styles.totals}>
             <div className={styles.totalLine}><span>Subtotal</span><span>{formatARS(cartTotal)}</span></div>
+            <div className={styles.totalLine}><span>Envío</span><span>{formatARS(shippingCost)}</span></div>
             
-            {paymentType === 'credit' && (
-               <div className={styles.totalLine} style={{color: '#2ecc71'}}>
-                 <span>Descuento Tarjeta Crédito</span>
-                 <span>- {formatARS(discountAmount)}</span>
-               </div>
+            {/* Mostrar Intereses si aplica */}
+            {interestAmount > 0 && (
+              <div className={styles.totalLine}>
+                <span>Intereses ({installments} cuotas)</span>
+                <span>{formatARS(interestAmount)}</span>
+              </div>
             )}
             
-            <div className={styles.totalLine}><span>Envío</span><span>{formatARS(shippingCost)}</span></div>
             <div className={`${styles.totalLine} ${styles.grandTotal}`}>
               <span>Total</span><span><strong>{formatARS(totalToPay)}</strong></span>
             </div>
+            
+            {/* Resumen de cuotas debajo del total */}
+            {paymentType === 'credit' && installments > 1 && (
+               <div className={styles.installmentsSummary} style={{textAlign: 'right', fontSize: '13px', color: '#666', marginTop: '5px'}}>
+                 Pagás en {installments} cuotas de <strong>{formatARS(amountPerInstallment)}</strong>
+               </div>
+            )}
           </div>
         </aside>
       </div>

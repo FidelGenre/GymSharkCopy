@@ -73,9 +73,10 @@
 .paymentType { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; }
 .radioActive { width: 18px; height: 18px; border: 5px solid #000; border-radius: 50%; background-color: #fff; }
 
-.cardLogos img {
-  height: 18px; width: auto; max-width: 35px;
+.cardLogos img, .cardLogos svg {
+  height: 24px; width: auto; max-width: 40px;
   margin-left: 6px; object-fit: contain;
+  color: #333;
 }
 
 .cardForm { padding: 20px; background-color: #fff; border-top: 1px solid #d9d9d9; }
@@ -114,6 +115,7 @@
   border-color: #000;
   background-color: #f4f4f4;
   font-weight: 600;
+  box-shadow: 0 0 0 1px #000 inset;
 }
 
 .typeOption input {
@@ -122,7 +124,32 @@
   height: 16px;
 }
 
-/* --- FIN NUEVOS ESTILOS PAGO --- */
+/* --- SELECTOR DE CUOTAS (Installments) --- */
+.installmentsWrapper {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #e6e6e6;
+}
+
+.installmentsLabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* Ajuste específico para el select de cuotas para que destaque */
+.installmentsWrapper select {
+  margin-bottom: 0; /* Quitar margen inferior porque ya tiene wrapper */
+  background-color: #fff;
+  border-color: #ccc;
+  font-weight: 500;
+}
 
 /* BILLING ADDRESS FORM */
 .billingToggle { padding: 15px 20px; background-color: #f9f9f9; border-top: 1px solid #d9d9d9; }
@@ -134,6 +161,11 @@
   padding: 20px; border: none; border-radius: 35px;
   font-weight: 800; font-size: 15px; cursor: pointer;
   margin-top: 25px; text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+
+.payNowBtn:hover {
+  opacity: 0.9;
 }
 
 /* RESUMEN DERECHA */
@@ -150,7 +182,12 @@
   display: flex; align-items: center; justify-content: center;
 }
 
-/* Etiqueta de descuento en el resumen */
+.itemInfo { flex: 1; }
+.itemName { font-weight: 600; font-size: 14px; margin: 0 0 4px; }
+.itemSize { font-size: 12px; color: #666; margin: 0; }
+.itemPrice { font-weight: 600; font-size: 14px; }
+
+/* Etiqueta de descuento/interés en el resumen */
 .discountTag {
   font-size: 11px;
   color: #2ecc71; /* Verde */
@@ -159,8 +196,14 @@
   margin-top: 4px;
 }
 
+.totals {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e6e6e6;
+}
+
 .totalLine { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #555; }
-.grandTotal { font-size: 18px; font-weight: 800; color: #000; margin-top: 15px; }
+.grandTotal { font-size: 18px; font-weight: 800; color: #000; margin-top: 15px; align-items: center; }
 
 @media (max-width: 900px) {
   .checkoutPage { grid-template-columns: 1fr; }
