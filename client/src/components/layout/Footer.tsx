@@ -141,8 +141,8 @@ const Footer: React.FC = () => {
 
             <div className={styles.contactWrapper}>
               <span className={styles.contactLabel}>¿Tienes alguna duda?</span>
-              <a href="mailto:soporte@gymsharkclone.com" className={styles.contactEmail}>
-                soporte@gymsharkclone.com
+              <a href="mailto:gymsharkcontacto@gmail.com" className={styles.contactEmail}>
+                gymsharkcontacto@gmail.com
               </a>
             </div>
 
@@ -150,7 +150,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className={styles.bottomBar}>
-          <p>© 2026 | GYMSHARK CLONE</p>
+          <p>© 2026 | GYMSHARK</p>
           <div className={styles.legalLinks}>
             <Link to="/terms">Términos</Link>
             <Link to="/privacy">Privacidad</Link>
