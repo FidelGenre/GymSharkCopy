@@ -20,17 +20,19 @@ const Hero: React.FC = () => {
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        // Tip: En producción, usa una variable de entorno para la URL de la API
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/products';
-        const response = await axios.get(apiUrl);
-        const data: Product[] = response.data;
-        setAllProducts(data);
+        // 🟢 FIX: URL apuntando DIRECTO a Render para evitar errores de localhost
+        const response = await axios.get('https://gymsharkcopyserver.onrender.com/api/products');
         
-        const initialFiltered = data.filter(p => p.category === 'MUJER');
-        setNewStyles(shuffle(initialFiltered).slice(0, 12));
-        setMoreProducts(shuffle(initialFiltered).slice(0, 12));
+        const data: Product[] = response.data;
+        // Si data es null o undefined, evitar crash
+        if (data && Array.isArray(data)) {
+            setAllProducts(data);
+            const initialFiltered = data.filter(p => p.category === 'MUJER');
+            setNewStyles(shuffle(initialFiltered).slice(0, 12));
+            setMoreProducts(shuffle(initialFiltered).slice(0, 12));
+        }
       } catch (error) {
-        console.error("Error al conectar con el servidor:", error);
+        console.error("Error cargando productos. Verifica que el Backend esté 'Live' en Render.", error);
       }
     };
     fetchHomeData();
@@ -61,14 +63,11 @@ const Hero: React.FC = () => {
     }
   };
 
-  /**
-   * FIX TS2345: Ajustamos el tipo del parámetro 'ref' para aceptar 'null' 
-   * y así coincidir con la inicialización de useRef(null).
-   */
   const scroll = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
     if (ref.current) {
       const { scrollLeft, clientWidth } = ref.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
+      const scrollAmount = clientWidth * 0.8; 
+      const scrollTo = direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
       ref.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
     }
   };
@@ -94,7 +93,7 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 2: BRAND NEW STYLES (NUEVOS ESTILOS) */}
+      {/* SECCIÓN 2: BRAND NEW STYLES */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>NUEVOS ESTILOS - {activeGender}</h2>
@@ -112,7 +111,7 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 3: POPULAR RIGHT NOW (POPULAR AHORA) */}
+      {/* SECCIÓN 3: POPULAR RIGHT NOW */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>POPULAR AHORA MISMO</h2>
         <div className={styles.categoryBannerGrid}>
@@ -134,7 +133,7 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 4: DUAL SHOP CARDS (COMPRA POR GÉNERO) */}
+      {/* SECCIÓN 4: DUAL SHOP CARDS */}
       <section className={styles.shopSection}>
         <div className={styles.dualBannerGrid}>
           <div className={styles.largeShopCard}>
@@ -148,7 +147,7 @@ const Hero: React.FC = () => {
         </div>
       </section>
 
-      {/* SECCIÓN 5: WAIT THERE'S MORE (ESPERA, HAY MÁS) */}
+      {/* SECCIÓN 5: WAIT THERE'S MORE */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>ESPERA, HAY MÁS...</h2>
