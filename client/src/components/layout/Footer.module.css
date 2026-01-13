@@ -243,6 +243,19 @@
   color: #000;
 }
 
+.legalTrigger {
+  font-size: 11px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s;
+  user-select: none;
+}
+
+.legalTrigger:hover {
+  color: #000;
+}
 /* --- RESPONSIVE (MÓVIL) --- */
 @media (max-width: 768px) {
   .grid {

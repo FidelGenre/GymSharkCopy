@@ -2,20 +2,24 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 
-// --- SUB-COMPONENTE TOOLTIP ---
+// --- SUB-COMPONENTE TOOLTIP ACTUALIZADO ---
 interface TooltipProps {
   label: string;
   text: string;
+  variant?: 'standard' | 'legal'; // Nueva prop opcional
 }
 
-const FooterTooltip: React.FC<TooltipProps> = ({ label, text }) => {
+const FooterTooltip: React.FC<TooltipProps> = ({ label, text, variant = 'standard' }) => {
   const [isOpen, setIsOpen] = useState(false);
   
   const toggle = () => setIsOpen(!isOpen);
 
+  // Elegimos la clase CSS según la variante
+  const triggerClass = variant === 'legal' ? styles.legalTrigger : styles.fakeLink;
+
   return (
     <div className={styles.tooltipWrapper} onClick={toggle}>
-      <span className={styles.fakeLink}>{label}</span>
+      <span className={triggerClass}>{label}</span>
       <div className={`${styles.tooltipBox} ${isOpen ? styles.active : ''}`}>
         {text}
         <div className={styles.tooltipClose}>(Toca para cerrar)</div>
@@ -43,23 +47,20 @@ const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
+        
+        {/* ... (Todo el contenido de .grid se mantiene igual) ... */}
         <div className={styles.grid}>
-          
-          {/* Columna 1: Ayuda */}
+          {/* Columna 1 */}
           <div className={styles.column}>
             <h4 className={styles.title}>AYUDA</h4>
             <ul className={styles.list}>
-              
-              {/* --- AQUI ESTÁ EL CAMBIO: PREGUNTAS FRECUENTES AHORA ES TOOLTIP --- */}
               <li>
                 <FooterTooltip 
                   label="Preguntas frecuentes" 
                   text="Consulta nuestro Centro de Ayuda para resolver dudas rápidas sobre tallas, envíos y cuidados de la prenda." 
                 />
               </li>
-
               <li><Link to="/orders">Estado del envío</Link></li>
-              
               <li>
                 <FooterTooltip 
                   label="Devoluciones" 
@@ -75,7 +76,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Columna 2: Mi Cuenta */}
+          {/* Columna 2 */}
           <div className={styles.column}>
             <h4 className={styles.title}>MI CUENTA</h4>
             <ul className={styles.list}>
@@ -84,7 +85,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Columna 3: Acerca De */}
+          {/* Columna 3 */}
           <div className={styles.column}>
             <h4 className={styles.title}>ACERCA DE</h4>
             <ul className={styles.list}>
@@ -109,7 +110,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Columna 4: Newsletter + CONTACTO */}
+          {/* Columna 4 */}
           <div className={styles.column}>
             <h4 className={styles.title}>ÚNETE A LA FAMILIA</h4>
             <p className={styles.text}>Sé el primero en enterarte de nuevos lanzamientos y ofertas.</p>
@@ -145,18 +146,33 @@ const Footer: React.FC = () => {
                 gymsharkcontacto@gmail.com
               </a>
             </div>
-
           </div>
         </div>
+        {/* ... Fin del grid ... */}
 
+        {/* --- BARRA INFERIOR MODIFICADA --- */}
         <div className={styles.bottomBar}>
           <p>© 2026 | GYMSHARK</p>
           <div className={styles.legalLinks}>
+            {/* Términos lo dejamos como link normal si quieres, o cámbialo a Tooltip también */}
             <Link to="/terms">Términos</Link>
-            <Link to="/privacy">Privacidad</Link>
-            <Link to="/cookies">Cookies</Link>
+            
+            {/* PRIVACIDAD AHORA ES POP-UP */}
+            <FooterTooltip 
+              label="Privacidad" 
+              variant="legal"
+              text="Tus datos están seguros. No compartimos información personal con terceros sin tu consentimiento explícito. Cumplimos con GDPR."
+            />
+            
+            {/* COOKIES AHORA ES POP-UP */}
+            <FooterTooltip 
+              label="Cookies" 
+              variant="legal"
+              text="Usamos cookies esenciales para que funcione el carrito de compras y cookies analíticas para mejorar tu experiencia."
+            />
           </div>
         </div>
+
       </div>
     </footer>
   );
