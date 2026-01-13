@@ -7,6 +7,7 @@
     overflow-x: hidden;
     font-family: 'Roboto', sans-serif; 
     color: #1f1f1f;
+    padding-bottom: 40px;
 }
 
 /* --- SECCIÓN HERO PRINCIPAL --- */
@@ -245,15 +246,54 @@
 }
 
 /* --- RESPONSIVE MEDIA QUERIES --- */
+
+/* Tablet */
 @media (max-width: 1024px) {
     .sliderItem { flex: 0 0 calc(50% - 10px); }
     .title { font-size: 40px; }
+    .categoryBannerGrid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Mobile - AQUÍ ESTÁ EL ARREGLO DE ESPACIOS Y CARDS */
 @media (max-width: 600px) {
-    .sliderItem { flex: 0 0 85%; }
+    /* 1. Ajuste de Textos y Botones */
     .title { font-size: 32px; } 
     .sectionTitle { font-size: 18px; }
     .primaryBtn { width: 100%; padding: 12px; text-align: center; }
     .actions { flex-direction: column; width: 100%; }
+
+    /* 2. ARREGLO DEL SLIDER (Full Bleed) */
+    /* Usamos márgenes negativos para que el slider toque los bordes de la pantalla */
+    .slider {
+        margin: 0 -4%; /* Rompe el padding de .section */
+        padding: 0 4%; /* Añade padding interno para alinear el primer item */
+        gap: 10px;
+    }
+
+    /* 3. ARREGLO DE CARDS "PEEKING" */
+    /* 85vw hace que se vea la siguiente tarjeta asomando */
+    .sliderItem { 
+        flex: 0 0 85vw; 
+        scroll-snap-align: center; 
+    }
+
+    /* 4. ARREGLO DE GRIDS (Para que no se aplasten) */
+    
+    /* Categorías en 2 columnas en lugar de 4 */
+    .categoryBannerGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    /* Banners Hombre/Mujer APILADOS (1 columna) */
+    .dualBannerGrid {
+        grid-template-columns: 1fr;
+        padding: 30px 4%;
+        gap: 15px;
+    }
+
+    /* Ocultar flechas en móvil (se usa el dedo) */
+    .controls {
+        display: none;
+    }
 }
