@@ -5,7 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="./public/logo_argentina.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GymShark</title>
-  </head>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17871601291"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      // Configuración de Consent Mode V2
+      // 'granted' permite que el pixel funcione y mida conversiones inmediatamente.
+      gtag('consent', 'default', {
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+        'analytics_storage': 'granted'
+      });
+
+      gtag('js', new Date());
+
+      gtag('config', 'AW-17871601291');
+    </script>
+    </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
