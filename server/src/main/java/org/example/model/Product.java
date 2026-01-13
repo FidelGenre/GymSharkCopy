@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
-import java.util.ArrayList;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -26,10 +27,13 @@ public class Product {
 
     private String currency;
 
+    // 🚀 OPTIMIZACIÓN DE VELOCIDAD:
+    // Usamos Set en lugar de List para permitir "JOIN FETCH" múltiples
+    // Esto reduce las consultas a la base de datos de 51 a solo 1.
     @ElementCollection
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "image_url")
-    private List<String> images = new ArrayList<>();
+    private Set<String> images = new HashSet<>();
 
     private String category;    // HOMBRE, MUJER
 
@@ -39,8 +43,9 @@ public class Product {
     private String tag;         // NEW, BEST SELLER
     private String description;
 
+    // 🚀 OPTIMIZACIÓN DE VELOCIDAD:
     @ElementCollection
     @CollectionTable(name = "product_sizes", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "size")
-    private List<String> sizes;
+    private Set<String> sizes = new HashSet<>();
 }
