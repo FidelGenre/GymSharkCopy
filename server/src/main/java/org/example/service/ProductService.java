@@ -12,33 +12,27 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    /**
-     * Obtiene productos aplicando filtros dinámicos.
-     */
     public List<Product> getAllProducts(String category, String search) {
-        // 1. Prioridad: Búsqueda por texto en el nombre
+        // 1. Búsqueda por texto
         if (search != null && !search.isEmpty()) {
             return productRepository.findByNameContainingIgnoreCase(search);
         }
 
-        // 2. Filtro por categoría (Género o Tipo)
+        // 2. Filtro por categoría
         if (category != null && !category.isEmpty()) {
-            // Usamos la versión optimizada si es una búsqueda exacta de género
             if (category.equalsIgnoreCase("HOMBRE") || category.equalsIgnoreCase("MUJER")) {
                  return productRepository.findByCategoryIgnoreCase(category);
             }
             return productRepository.findByCategoryContainingIgnoreCase(category);
         }
 
-        // 3. Si no hay parámetros (HOME PAGE), usamos la consulta OPTIMIZADA
-        // ANTES: return productRepository.findAll();  <-- LENTO (8s)
-        // AHORA:
-        return productRepository.findAllWithRelationships(); // <-- RÁPIDO (0.2s)
+        // 3. HOME PAGE (Sin filtros)
+        // Gracias a 'default_batch_fetch_size=50', esto ahora hace solo 3 consultas rápidas
+        // en lugar de 1 gigante o 51 lentas.
+        return productRepository.findAll();
     }
-
-    /**
-     * Obtiene productos por categoría y subcategoría (Filtro de navegación)
-     */
+    
+    // ... resto de métodos (getProductById, etc.) igual que antes
     public List<Product> getProductsByGenderAndType(String category, String subCategory) {
         return productRepository.findByCategoryIgnoreCaseAndSubCategoryIgnoreCase(category, subCategory);
     }
