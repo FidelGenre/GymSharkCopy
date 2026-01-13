@@ -1,6 +1,8 @@
-/* Layout Principal */
+/* =========================================
+   LAYOUT PRINCIPAL (Idéntico a Profile)
+   ========================================= */
 .profileContainer {
-  max-width: 1200px;
+  max-width: 1200px; /* Ancho máximo igual al perfil */
   margin: 40px auto;
   padding: 0 20px;
   display: flex;
@@ -9,13 +11,15 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* --- ESTILOS DEL SIDEBAR --- */
+/* =========================================
+   SIDEBAR (Copiado de Profile para consistencia)
+   ========================================= */
 .sidebar {
   width: 300px;
   display: flex;
   flex-direction: column;
   gap: 30px;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Evita que se aplaste */
 }
 
 .userInfo {
@@ -89,11 +93,14 @@
   border-radius: 0 !important;
 }
 
-/* --- ESTILOS DEL CONTENIDO (Orders) --- */
+/* =========================================
+   CONTENIDO PRINCIPAL (Donde van los pedidos)
+   ========================================= */
 .content {
-  flex: 1;
+  flex: 1; /* Ocupa el espacio restante */
   display: flex;
   flex-direction: column;
+  max-width: 100%; /* Evita desbordamiento */
 }
 
 .pageTitle {
@@ -102,93 +109,91 @@
   margin-bottom: 30px;
   text-align: left;
   letter-spacing: -0.5px;
+  text-transform: uppercase;
 }
 
+/* LISTA DE PEDIDOS */
 .ordersList {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 }
 
+/* TARJETA DE PEDIDO */
 .orderCard {
   border: 1px solid #e6e6e6;
-  border-radius: 4px;
+  border-radius: 8px; /* Bordes redondeados como en Profile */
   background: #fff;
-  transition: transform 0.2s ease;
+  overflow: hidden; /* Para que el header no rompa el borde */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.orderCard:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* HEADER DE LA TARJETA */
 .cardHeader {
-  background: #f6f6f6;
-  padding: 20px;
+  background: #fafafa;
+  padding: 20px 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .headerInfo {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .orderLabel {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   color: #767676;
   text-transform: uppercase;
-  display: block;
-  margin-bottom: 5px;
 }
 
 .orderId {
   font-weight: 800;
-  font-size: 15px;
+  font-size: 16px;
+  color: #000;
 }
 
-/* Badge de Estado */
+/* BADGE DE ESTADO */
 .orderStatus {
   background: #000;
   color: #fff;
-  padding: 6px 14px;
+  padding: 6px 12px;
   font-size: 11px;
   font-weight: 800;
-  border-radius: 2px;
+  border-radius: 4px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Estados dinámicos */
+/* Colores dinámicos para estados (opcional) */
 .delivered { background: #000; }
 .pending { background: #767676; }
 
+/* CUERPO DE LA TARJETA */
 .cardBody {
   padding: 25px;
 }
 
-/* --- NUEVO: Modificado para soportar la fecha y la entrega --- */
+/* Datos meta (Fecha, Entrega) */
 .orderMeta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap; /* Para móviles */
-  gap: 15px; /* Espacio entre fecha y entrega */
+  flex-wrap: wrap;
+  gap: 20px;
   font-size: 13px;
   font-weight: 600;
-  color: #545454;
+  color: #555;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0; /* Agregué una línea sutil abajo */
-}
-
-/* --- NUEVO: Estilo específico para el bloque de entrega --- */
-.deliveryInfo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: #f0fff4; /* Un verde muy sutil de fondo */
-  color: #166534; /* Verde oscuro para el texto */
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 12px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .metaDate {
@@ -197,115 +202,127 @@
   gap: 6px;
 }
 
+.deliveryInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f0fff4;
+  color: #166534;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* LISTA DE PRODUCTOS DENTRO DE LA TARJETA */
 .productList {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .productItem {
   font-size: 14px;
-  font-weight: 700;
-  margin: 10px 0;
+  font-weight: 500;
+  margin: 8px 0;
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #111;
+  gap: 8px;
+  color: #333;
 }
 
-/* --- NUEVO: Divisor visual si se necesita separar secciones --- */
-.divider {
-  height: 1px;
-  background-color: #f0f0f0;
-  margin: 15px 0;
-}
-
+/* FOOTER DE LA TARJETA (PRECIO) */
 .footerRow {
-  border-top: 1px solid #f0f0f0;
-  padding-top: 20px;
   display: flex;
-  justify-content: space-between; /* Separar Total y Botón */
+  justify-content: flex-end; /* Alinea el total a la derecha */
   align-items: center;
+  padding-top: 10px;
 }
 
 .orderTotal {
   display: flex;
   flex-direction: column;
+  align-items: flex-end; /* Alinea texto a la derecha */
 }
 
 .totalLabel {
-  display: block;
   font-size: 11px;
   font-weight: 800;
-  color: #767676;
-  margin-bottom: 4px;
+  color: #888;
+  margin-bottom: 2px;
+  text-transform: uppercase;
 }
 
 .totalAmount {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
+  color: #000;
 }
 
-/* --- NUEVO: Botón "Ver detalles" --- */
-.detailsBtn {
-  background: none;
-  border: none;
-  font-size: 13px;
-  font-weight: 700;
-  color: #111;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: opacity 0.2s;
-}
-
-.detailsBtn:hover {
-  text-decoration: underline;
-}
-
-/* Empty State */
+/* ESTADOS VACÍOS Y CARGA */
 .centered {
-  padding: 150px 20px;
+  padding: 100px 0;
   text-align: center;
-  font-weight: 800;
-  font-size: 18px;
+  font-weight: 700;
+  color: #666;
 }
 
 .emptyContainer {
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  color: #767676;
   border: 2px dashed #eee;
   border-radius: 8px;
+  background: #fafafa;
 }
 
 .empty {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  color: #666;
 }
 
 .shopBtn {
   background: #000;
   color: #fff;
   border: none;
-  padding: 15px 40px;
+  padding: 14px 30px;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 13px;
+  text-transform: uppercase;
   cursor: pointer;
+  border-radius: 4px;
+  transition: opacity 0.2s;
 }
 
-/* RESPONSIVE */
+.shopBtn:hover {
+  opacity: 0.9;
+}
+
+/* =========================================
+   RESPONSIVE (Igual que Profile)
+   ========================================= */
 @media (max-width: 900px) {
   .profileContainer {
-    flex-direction: column;
+    flex-direction: column; /* Apila sidebar sobre contenido */
+    gap: 30px;
   }
+  
   .sidebar {
-    width: 100%;
+    width: 100%; /* Sidebar ocupa todo el ancho */
   }
+  
   .pageTitle {
-    text-align: center;
+    font-size: 24px;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .orderStatus {
+    align-self: flex-start;
   }
 }

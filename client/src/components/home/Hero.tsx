@@ -11,6 +11,7 @@ const Hero: React.FC = () => {
   const [newStyles, setNewStyles] = useState<Product[]>([]);
   const [moreProducts, setMoreProducts] = useState<Product[]>([]);
   const [activeGender, setActiveGender] = useState<'MUJER' | 'HOMBRE'>('MUJER');
+  const [loading, setLoading] = useState(true); // 🟢 NUEVO: Estado de carga
   
   const newStylesRef = useRef<HTMLDivElement>(null);
   const moreRef = useRef<HTMLDivElement>(null);
@@ -19,12 +20,11 @@ const Hero: React.FC = () => {
 
   useEffect(() => {
     const fetchHomeData = async () => {
+      setLoading(true); // Empieza a cargar
       try {
-        // 🟢 FIX: URL apuntando DIRECTO a Render para evitar errores de localhost
         const response = await axios.get('https://gymsharkcopyserver.onrender.com/api/products');
         
         const data: Product[] = response.data;
-        // Si data es null o undefined, evitar crash
         if (data && Array.isArray(data)) {
             setAllProducts(data);
             const initialFiltered = data.filter(p => p.category === 'MUJER');
@@ -32,7 +32,9 @@ const Hero: React.FC = () => {
             setMoreProducts(shuffle(initialFiltered).slice(0, 12));
         }
       } catch (error) {
-        console.error("Error cargando productos. Verifica que el Backend esté 'Live' en Render.", error);
+        console.error("Error cargando productos:", error);
+      } finally {
+        setLoading(false); // 🟢 Termina de cargar (sea éxito o error)
       }
     };
     fetchHomeData();
@@ -72,6 +74,15 @@ const Hero: React.FC = () => {
     }
   };
 
+  // 🟢 Componente interno para el Skeleton (Caja Gris)
+  const ProductSkeleton = () => (
+    <div className={styles.skeletonCard}>
+      <div className={styles.skeletonImage}></div>
+      <div className={styles.skeletonText} style={{ width: '70%' }}></div>
+      <div className={styles.skeletonText} style={{ width: '40%' }}></div>
+    </div>
+  );
+
   return (
     <div className={styles.homeWrapper}>
       
@@ -102,12 +113,17 @@ const Hero: React.FC = () => {
             <button onClick={() => scroll(newStylesRef, 'right')} className={styles.controlBtn}><ChevronRight size={20}/></button>
           </div>
         </div>
+        
+        {/* Lógica de Carga vs Productos */}
         <div className={styles.slider} ref={newStylesRef}>
-          {newStyles.map((p) => (
-            <div key={p.id} className={styles.sliderItem}>
-              <ProductCard product={p} />
-            </div>
-          ))}
+          {loading 
+            ? Array(4).fill(0).map((_, i) => <div key={i} className={styles.sliderItem}><ProductSkeleton /></div>)
+            : newStyles.map((p) => (
+                <div key={p.id} className={styles.sliderItem}>
+                  <ProductCard product={p} />
+                </div>
+              ))
+          }
         </div>
       </section>
 
@@ -157,11 +173,14 @@ const Hero: React.FC = () => {
           </div>
         </div>
         <div className={styles.slider} ref={moreRef}>
-          {moreProducts.map((p) => (
-            <div key={`more-${p.id}`} className={styles.sliderItem}>
-              <ProductCard product={p} />
-            </div>
-          ))}
+          {loading 
+            ? Array(4).fill(0).map((_, i) => <div key={i} className={styles.sliderItem}><ProductSkeleton /></div>)
+            : moreProducts.map((p) => (
+                <div key={`more-${p.id}`} className={styles.sliderItem}>
+                  <ProductCard product={p} />
+                </div>
+              ))
+          }
         </div>
       </section>
     </div>
