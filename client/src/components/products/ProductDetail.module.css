@@ -1,40 +1,98 @@
 /* 1. IMPORTAR FUENTES */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Roboto:wght@400;500;700&display=swap');
 
+/* CONTENEDOR PRINCIPAL: Previene que nada se salga del ancho */
 .pageContainer { 
     max-width: 1200px; 
     margin: 0 auto; 
-    padding: 100px 20px 60px; 
+    padding: 40px 20px 60px; /* Reduje el padding superior para que no quede tanto hueco */
     background: #fff; 
-    font-family: 'Roboto', sans-serif; /* Fuente base para el contenido */
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden; /* 🔒 CLAVE: Bloquea el desborde horizontal */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .backBtn { 
     background: none; 
     border: none; 
-    font-family: 'Montserrat', sans-serif; /* */
+    font-family: 'Montserrat', sans-serif;
     font-weight: 800; 
     font-size: 12px; 
     cursor: pointer; 
-    margin-bottom: 30px; 
+    margin-bottom: 20px; 
     text-decoration: underline; 
     text-transform: uppercase; 
+    display: inline-block;
 }
 
-.content { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; }
+/* GRID PRINCIPAL */
+.content { 
+    display: grid; 
+    grid-template-columns: 1.2fr 0.8fr; 
+    gap: 60px; 
+    width: 100%;
+}
 
 /* GALERÍA */
-.galleryWrapper { display: flex; gap: 15px; }
-.thumbnailList { display: flex; flex-direction: column; gap: 10px; }
-.thumbBtn { width: 70px; aspect-ratio: 4/5; border: 1px solid #eee; padding: 0; cursor: pointer; background: #f9f9f9; }
-.thumbBtn img { width: 100%; height: 100%; object-fit: cover; }
-.activeThumb { border: 2px solid black; }
-.mainImageContainer { flex: 1; background: #f6f6f6; aspect-ratio: 4/5; }
-.mainImage { width: 100%; height: 100%; object-fit: cover; }
+.galleryWrapper { 
+    display: flex; 
+    gap: 15px; 
+    width: 100%;
+    position: sticky; /* Opcional: para que la imagen te siga al bajar en desktop */
+    top: 100px;
+    align-self: start;
+}
+
+.thumbnailList { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+}
+
+.thumbBtn { 
+    width: 70px; 
+    aspect-ratio: 4/5; 
+    border: 1px solid #eee; 
+    padding: 0; 
+    cursor: pointer; 
+    background: #f9f9f9; 
+    flex-shrink: 0; /* Evita que se aplasten */
+}
+
+.thumbBtn img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    display: block;
+}
+
+.activeThumb { 
+    border: 2px solid black; 
+}
+
+.mainImageContainer { 
+    flex: 1; 
+    background: #f6f6f6; 
+    aspect-ratio: 4/5; 
+    width: 100%;
+    overflow: hidden; /* Asegura que la imagen no se salga */
+}
+
+.mainImage { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    display: block;
+}
 
 /* INFO SECTION */
+.infoSection {
+    width: 100%;
+}
+
 .categoryTag { 
-    font-family: 'Montserrat', sans-serif; /* */
+    font-family: 'Montserrat', sans-serif;
     font-size: 11px; 
     font-weight: 800; 
     color: #767676; 
@@ -43,26 +101,36 @@
 }
 
 .title { 
-    font-family: 'Montserrat', sans-serif; /* Estilo de gran impacto */
+    font-family: 'Montserrat', sans-serif;
     font-size: 26px; 
     font-weight: 550; 
     text-transform: uppercase; 
     margin-bottom: 10px; 
     line-height: 1.1; 
+    word-wrap: break-word; /* Evita que títulos largos rompan el ancho */
 }
 
 .price { 
-    font-family: 'Montserrat', sans-serif; /* */
+    font-family: 'Montserrat', sans-serif;
     font-size: 24px; 
     font-weight: 700; 
     margin-bottom: 30px; 
 }
 
 /* SELECTOR DE TALLES */
-.sizeHeader { display: flex; justify-content: space-between; margin-bottom: 15px; }
+.sizeSelector {
+    margin-bottom: 30px;
+}
+
+.sizeHeader { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 15px; 
+    align-items: center;
+}
 
 .sizeLabel { 
-    font-family: 'Montserrat', sans-serif; /* */
+    font-family: 'Montserrat', sans-serif;
     font-weight: 900; 
     font-size: 12px; 
 }
@@ -70,26 +138,41 @@
 .guideBtn { 
     background: none; 
     border: none; 
-    font-family: 'Roboto', sans-serif; /* */
+    font-family: 'Roboto', sans-serif;
     text-decoration: underline; 
     font-size: 12px; 
     font-weight: 800; 
     cursor: pointer; 
+    padding: 5px;
 }
 
-.sizeGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+.sizeGrid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px; 
+}
 
 .sizeBtn { 
-    font-family: 'Montserrat', sans-serif; /* */
-    padding: 18px; 
+    font-family: 'Montserrat', sans-serif;
+    padding: 15px 0; /* Ajuste para que sea más uniforme */
     background: white; 
     border: 1px solid #ddd; 
     font-weight: 900; 
     cursor: pointer; 
     font-size: 13px; 
+    text-align: center;
+    transition: all 0.2s;
 }
 
-.activeSize { background: black; color: white; border-color: black; }
+.sizeBtn:hover {
+    border-color: #000;
+}
+
+.activeSize { 
+    background: black; 
+    color: white; 
+    border-color: black; 
+}
 
 .addBtn { 
     width: 100%; 
@@ -97,7 +180,7 @@
     background: black; 
     color: white; 
     border: none; 
-    font-family: 'Montserrat', sans-serif; /* Acción principal */
+    font-family: 'Montserrat', sans-serif;
     font-weight: 950; 
     font-size: 14px; 
     cursor: pointer; 
@@ -106,93 +189,91 @@
     transition: 0.3s; 
 }
 
-.addBtn:hover { background: #333; }
+.addBtn:hover { 
+    background: #333; 
+}
 
-/* MODAL GUÍA DE TALLES */
+/* --- MODAL Y TABLAS (Sin cambios mayores, solo ajustes de seguridad) --- */
 .modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-.modalContent { background: white; width: 100%; max-width: 650px; padding: 50px 40px; position: relative; text-align: center; }
-.closeModal { position: absolute; top: 25px; right: 25px; background: none; border: none; cursor: pointer; }
+.modalContent { background: white; width: 100%; max-width: 650px; padding: 50px 40px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
+.closeModal { position: absolute; top: 15px; right: 15px; background: none; border: none; cursor: pointer; padding: 10px;}
 
-.modalTitle { 
-    font-family: 'Montserrat', sans-serif; /* */
-    font-size: 26px; 
-    font-weight: 950; 
-    margin-bottom: 25px; 
-    text-transform: uppercase; 
-}
-
+.modalTitle { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 950; margin-bottom: 25px; text-transform: uppercase; }
 .unitToggle { display: inline-flex; background: #f2f2f2; padding: 4px; border-radius: 50px; margin-bottom: 30px; }
-
-.toggleBtn { 
-    border: none; 
-    font-family: 'Montserrat', sans-serif; /* */
-    padding: 10px 20px; 
-    border-radius: 50px; 
-    font-weight: 800; 
-    font-size: 11px; 
-    cursor: pointer; 
-    background: transparent; 
-}
-
+.toggleBtn { border: none; font-family: 'Montserrat', sans-serif; padding: 10px 20px; border-radius: 50px; font-weight: 800; font-size: 11px; cursor: pointer; background: transparent; }
 .toggleActive { background: #53565a; color: white; }
 
-/* TABLAS ESTÁNDAR */
 .sizeTable { width: 100%; border-collapse: collapse; margin-top: 10px; }
-
-.sizeTable th { 
-    font-family: 'Montserrat', sans-serif; /* */
-    font-size: 11px; 
-    font-weight: 900; 
-    padding: 15px; 
-    color: #000; 
-    text-align: center; 
-    border-bottom: 1px solid #eee; 
-    text-transform: uppercase; 
-}
-
-.sizeTable td { 
-    font-family: 'Roboto', sans-serif; /* Lectura clara de medidas */
-    padding: 15px; 
-    font-size: 13px; 
-    border-bottom: 1px solid #f6f6f6; 
-}
-
+.sizeTable th { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 900; padding: 10px; color: #000; text-align: center; border-bottom: 1px solid #eee; text-transform: uppercase; }
+.sizeTable td { font-family: 'Roboto', sans-serif; padding: 10px; font-size: 13px; border-bottom: 1px solid #f6f6f6; }
 .boldCell { font-weight: 950; }
-
-/* MATRIZ BRASIER */
 .matrixWrapper { overflow-x: auto; margin-top: 10px; }
-
-.tableLabel { 
-    font-family: 'Montserrat', sans-serif; /* */
-    font-size: 11px; 
-    font-weight: 950; 
-    text-align: center; 
-    margin-bottom: 15px; 
-    color: #000; 
-}
-
+.tableLabel { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 950; text-align: center; margin-bottom: 15px; color: #000; }
 .braTable { width: 100%; border-collapse: collapse; font-size: 12px; }
-.braTable th, .braTable td { border: 1px solid #e5e5e5; padding: 12px 8px; text-align: center; }
-
-.braTable th { 
-    font-family: 'Montserrat', sans-serif; /* */
-    background: #fdfdfd; 
-    font-weight: 900; 
-    font-size: 10px; 
-}
-
-.underbustCol { 
-    font-family: 'Montserrat', sans-serif; /* */
-    font-weight: 950; 
-    background: #fafafa; 
-    border-right: 2px solid #eee; 
-}
-
+.braTable th, .braTable td { border: 1px solid #e5e5e5; padding: 8px; text-align: center; }
+.braTable th { font-family: 'Montserrat', sans-serif; background: #fdfdfd; font-weight: 900; font-size: 10px; }
+.underbustCol { font-family: 'Montserrat', sans-serif; font-weight: 950; background: #fafafa; border-right: 2px solid #eee; }
 .emptyCell { border: none !important; }
 
+/* =========================================
+   MEDIA QUERY: MÓVIL (LA SOLUCIÓN)
+   ========================================= */
 @media (max-width: 900px) {
-    .content { grid-template-columns: 1fr; }
-    .galleryWrapper { flex-direction: column-reverse; }
-    .thumbnailList { flex-direction: row; justify-content: center; }
-    .modalContent { padding: 40px 20px; }
+    .pageContainer {
+        padding: 20px 15px 40px; /* Menos padding en móvil */
+        overflow-x: hidden;
+    }
+
+    .content { 
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        width: 100%;
+    }
+
+    .galleryWrapper { 
+        display: flex;
+        flex-direction: column-reverse; /* Thumbnails abajo */
+        gap: 15px;
+        position: static; /* Quita el sticky en móvil */
+        width: 100%;
+    }
+
+    .mainImageContainer {
+        width: 100%;
+        aspect-ratio: 4/5;
+    }
+
+    /* 🟢 CORRECCIÓN DE THUMBNAILS EN MÓVIL */
+    .thumbnailList { 
+        flex-direction: row; 
+        justify-content: flex-start; /* Empieza a la izquierda */
+        gap: 10px;
+        width: 100%;
+        overflow-x: auto; /* Permite scroll horizontal */
+        padding-bottom: 5px; /* Espacio para scrollbar */
+        
+        /* Ocultar barra de scroll para que se vea limpio */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .thumbnailList::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+
+    .thumbBtn {
+        width: 60px; /* Un poco más pequeños en móvil */
+        height: 75px; /* Forzar altura para evitar saltos */
+        flex-shrink: 0; /* IMPIDE QUE SE APLASTEN */
+    }
+
+    .title {
+        font-size: 20px; /* Título más chico para que no rompa */
+    }
+
+    .modalContent { 
+        padding: 30px 15px; 
+        width: 90%;
+    }
 }
