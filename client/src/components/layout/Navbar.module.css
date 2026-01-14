@@ -13,6 +13,7 @@
   z-index: 1000;
   /* Aplicamos la fuente base para todo el header */
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #000; /* Aseguramos texto negro base */
 }
 
 .navbar {
@@ -45,7 +46,7 @@
   border: none;
   cursor: pointer;
   padding: 8px;
-  color: #000;
+  color: #000; /* Aseguramos menú hamburguesa negro */
 }
 
 /* =========================================
@@ -54,16 +55,16 @@
 
 .desktopNav {
   display: flex;
-  gap: 30px; /* Un poco más de espacio entre links */
+  gap: 30px; 
 }
 
 .navLink {
   background: none;
   border: none;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 400;     /* Mantenemos la letra fina */
-  font-size: 14px;      /* <--- CAMBIO: De 16px a 14px */
-  letter-spacing: 0.5px; /* Un pelín de aire para que se lea bien en tamaño pequeño */
+  font-weight: 400;     
+  font-size: 14px;      
+  letter-spacing: 0.5px; 
   color: #2e2e2e;
   cursor: pointer;
   padding: 30px 0;
@@ -71,7 +72,7 @@
 }
 
 .navLink:hover {
-  color: #757575; /* Efecto suave al pasar el mouse */
+  color: #757575; 
 }
 
 /* =========================================
@@ -98,6 +99,7 @@
   flex: 1;
 }
 
+/* 🟢 CORRECCIÓN AQUÍ: Forzamos color negro en los iconos */
 .iconBtn, .cartBtn {
   background: none;
   border: none;
@@ -105,11 +107,13 @@
   padding: 8px;
   display: flex;
   align-items: center;
+  color: #000 !important; /* Forzamos negro para evitar el azul por defecto */
 }
 
+/* 🟢 CORRECCIÓN AQUÍ: Enlace de usuario en negro */
 .userSessionLink {
   text-decoration: none;
-  color: inherit;
+  color: #000 !important; /* Forzamos negro explícitamente */
   display: flex;
 }
 
@@ -122,6 +126,7 @@
   padding: 8px;
   border-radius: 50%;
   transition: background 0.2s ease;
+  color: #000; /* Asegura que el icono dentro sea negro */
 }
 
 .userIconWrapper:hover {
@@ -140,7 +145,7 @@
   background-color: #000;
   color: #fff;
   font-size: 10px;
-  font-weight: 700; /* Reducido un poco el peso */
+  font-weight: 700; 
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -164,7 +169,7 @@
   height: 45px;
   background-color: #f5f5f5;
   border: none;
-  border-radius: 4px; /* Más cuadrado como Gymshark moderno, o usa 50px si prefieres redondo */
+  border-radius: 4px; 
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -210,6 +215,7 @@
   padding: 0;
   transition: opacity 0.2s;
   width: 60px;
+  color: #000; /* Aseguramos flecha negra */
 }
 
 .backButton:hover {
@@ -217,11 +223,12 @@
 }
 
 .backText {
-  font-weight: 500; /* Regular/Medium */
+  font-weight: 500; 
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: none;
+  color: #000;
 }
 
 .logoMinimal {
