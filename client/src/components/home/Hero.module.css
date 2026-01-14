@@ -8,7 +8,6 @@
     font-family: 'Roboto', sans-serif; 
     color: #1f1f1f;
     padding-bottom: 40px;
-    width: 100%; /* Asegura ancho completo */
 }
 
 /* --- SECCIÓN HERO PRINCIPAL --- */
@@ -19,13 +18,7 @@
     background-size: cover;
     background-position: center;
     position: relative;
-    
-    /* 🟢 EFECTO PARALLAX: La imagen se queda quieta al hacer scroll */
-    background-attachment: fixed; 
 }
-
-/* En móviles, a veces 'fixed' da problemas, así que lo desactivamos solo en pantallas táctiles pequeñas si es necesario, 
-   pero por defecto lo dejamos activo. */
 
 .overlay {
     position: absolute;
@@ -53,7 +46,7 @@
 
 .title {
     font-family: 'Montserrat', sans-serif; 
-    font-size: 48px;       
+    font-size: 48px;       /* Reducido para no ser exagerado */
     font-weight: 900;      
     color: white;
     line-height: 1.1;     
@@ -98,7 +91,7 @@
 
 .sectionTitle { 
     font-family: 'Montserrat', sans-serif;
-    font-size: 22px;      
+    font-size: 22px;      /* Tamaño equilibrado para títulos como "POPULAR AHORA" */
     font-weight: 800;     
     margin: 0; 
     text-transform: uppercase; 
@@ -297,71 +290,54 @@
   animation: shimmer 1.5s infinite;
 }
 
-/* =========================================
-   ARREGLO TABLET Y MÓVIL (1024px)
-   ========================================= */
-/* 🔥 CAMBIO CLAVE: Subimos a 1024px para cubrir iPads/Tablets */
+/* --- RESPONSIVE MEDIA QUERIES --- */
+
+/* Tablet */
 @media (max-width: 1024px) {
-    
-    /* 1. Forzamos ancho completo en Tablets */
-    .homeWrapper {
-        width: 100%;
-        overflow-x: hidden;
-    }
-
-    .section {
-        padding: 40px 4%; /* Reduce un poco el padding */
-    }
-
-    /* 2. Ajuste de Títulos */
-    .title { font-size: 36px; } 
-    .sectionTitle { font-size: 18px; }
-
-    /* 3. Slider adaptable (2 items en tablet, 1 en móvil) */
-    .sliderItem { 
-        flex: 0 0 calc(50% - 10px); /* 2 items por fila en Tablet */
-    }
-
-    .categoryBannerGrid { 
-        grid-template-columns: repeat(2, 1fr); /* 2 columnas en Tablet */
-    }
+    .sliderItem { flex: 0 0 calc(50% - 10px); }
+    .title { font-size: 40px; }
+    .categoryBannerGrid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* =========================================
-   ARREGLO MÓVIL (600px)
-   ========================================= */
+/* Mobile - AQUÍ ESTÁ EL ARREGLO DE ESPACIOS Y CARDS */
 @media (max-width: 600px) {
-    
+    /* 1. Ajuste de Textos y Botones */
     .title { font-size: 32px; } 
-    
-    /* Botones full width */
+    .sectionTitle { font-size: 18px; }
     .primaryBtn { width: 100%; padding: 12px; text-align: center; }
     .actions { flex-direction: column; width: 100%; }
 
-    /* Slider "Peek" (se ve un poquito del siguiente) */
+    /* 2. ARREGLO DEL SLIDER (Full Bleed) */
+    /* Usamos márgenes negativos para que el slider toque los bordes de la pantalla */
     .slider {
-        margin: 0 -4%; 
-        padding: 0 4%; 
+        margin: 0 -4%; /* Rompe el padding de .section */
+        padding: 0 4%; /* Añade padding interno para alinear el primer item */
         gap: 10px;
     }
 
+    /* 3. ARREGLO DE CARDS "PEEKING" */
+    /* 85vw hace que se vea la siguiente tarjeta asomando */
     .sliderItem { 
-        flex: 0 0 85vw; /* 1 item grande en Móvil */
+        flex: 0 0 85vw; 
         scroll-snap-align: center; 
     }
 
-    /* Grids verticales */
+    /* 4. ARREGLO DE GRIDS (Para que no se aplasten) */
+    
+    /* Categorías en 2 columnas en lugar de 4 */
+    .categoryBannerGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    /* Banners Hombre/Mujer APILADOS (1 columna) */
     .dualBannerGrid {
         grid-template-columns: 1fr;
         padding: 30px 4%;
         gap: 15px;
     }
 
-    .categoryBannerGrid {
-        gap: 10px;
-        /* Mantenemos 2 columnas en categorías porque 1 sola queda muy grande */
-    }
-
+    /* Ocultar flechas en móvil (se usa el dedo) */
     .controls {
         display: none;
     }
