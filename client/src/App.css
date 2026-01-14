@@ -87,3 +87,15 @@ main {
     padding: 0 !important;
   }
 }
+
+@media (max-width: 1024px) {
+  .App {
+    overflow-x: hidden; /* Doble seguridad para móvil */
+  }
+  
+  /* A veces el body tiene un margin de 8px por defecto en Chrome móvil */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
