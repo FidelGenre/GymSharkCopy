@@ -28,6 +28,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 15px;
+  color: #000;
 }
 
 .inputField, .cardInput {
@@ -41,6 +42,7 @@
   transition: border 0.1s;
   appearance: none;
   -webkit-appearance: none;
+  color: #000;
 }
 
 .inputField:focus, .cardInput:focus {
@@ -53,35 +55,43 @@
 .inputRowThree { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 12px; }
 
 .selectWrapper { position: relative; }
-.selectIcon { position: absolute; right: 12px; top: 15px; color: #666; pointer-events: none; }
+.selectIcon { position: absolute; right: 12px; top: 15px; color: #000; pointer-events: none; }
 
 .checkboxLabel {
   display: flex;
   align-items: center; gap: 10px;
   font-size: 13px; margin: 10px 0; cursor: pointer;
+  color: #000;
+}
+
+/* Forzar color negro en checkboxes nativos */
+.checkboxLabel input[type="checkbox"] {
+  accent-color: #000;
 }
 
 .shippingMethodBox {
   display: flex; justify-content: space-between;
   padding: 18px; border: 2px solid #d9d9d9;
   border-radius: 4px; font-weight: 600; font-size: 14px;
+  color: #000;
 }
 
 /* --- SECCIÓN PAGO --- */
 .paymentContainer { border: 1px solid #d9d9d9; border-radius: 5px; overflow: hidden; }
 .paymentHeader { background-color: #f9f9f9; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-.paymentType { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; }
+.paymentType { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; color: #000; }
+
+/* Radio button personalizado activo (círculo negro) */
 .radioActive { width: 18px; height: 18px; border: 5px solid #000; border-radius: 50%; background-color: #fff; }
 
-.cardLogos img, .cardLogos svg {
-  height: 24px; width: auto; max-width: 40px;
+.cardLogos img {
+  height: 18px; width: auto; max-width: 35px;
   margin-left: 6px; object-fit: contain;
-  color: #333;
 }
 
 .cardForm { padding: 20px; background-color: #fff; border-top: 1px solid #d9d9d9; }
 .inputWrapper { position: relative; }
-.lockIcon { position: absolute; right: 12px; top: 14px; color: #999; }
+.lockIcon { position: absolute; right: 12px; top: 14px; color: #000; }
 
 /* NUEVOS ESTILOS: Selector de tipo de tarjeta (Crédito/Débito) */
 .typeSelector {
@@ -104,6 +114,7 @@
   font-weight: 500;
   transition: all 0.2s;
   background-color: #fff;
+  color: #000;
 }
 
 .typeOption:hover {
@@ -115,57 +126,27 @@
   border-color: #000;
   background-color: #f4f4f4;
   font-weight: 600;
-  box-shadow: 0 0 0 1px #000 inset;
 }
 
+/* Forzar color negro en radios nativos */
 .typeOption input {
   accent-color: #000;
   width: 16px;
   height: 16px;
 }
 
-/* --- SELECTOR DE CUOTAS (Installments) --- */
-.installmentsWrapper {
-  margin-top: 5px;
-  margin-bottom: 15px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  border: 1px solid #e6e6e6;
-}
-
-.installmentsLabel {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: #555;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-
-/* Ajuste específico para el select de cuotas para que destaque */
-.installmentsWrapper select {
-  margin-bottom: 0; /* Quitar margen inferior porque ya tiene wrapper */
-  background-color: #fff;
-  border-color: #ccc;
-  font-weight: 500;
-}
+/* --- FIN NUEVOS ESTILOS PAGO --- */
 
 /* BILLING ADDRESS FORM */
 .billingToggle { padding: 15px 20px; background-color: #f9f9f9; border-top: 1px solid #d9d9d9; }
 .billingAddressForm { padding: 20px; background-color: #fff; border-top: 1px solid #d9d9d9; }
-.billingTitle { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: #333; }
+.billingTitle { font-size: 14px; font-weight: 700; margin-bottom: 15px; color: #000; }
 
 .payNowBtn {
   width: 100%; background-color: #000; color: #fff;
   padding: 20px; border: none; border-radius: 35px;
   font-weight: 800; font-size: 15px; cursor: pointer;
   margin-top: 25px; text-transform: uppercase;
-  transition: opacity 0.2s;
-}
-
-.payNowBtn:hover {
-  opacity: 0.9;
 }
 
 /* RESUMEN DERECHA */
@@ -182,28 +163,17 @@
   display: flex; align-items: center; justify-content: center;
 }
 
-.itemInfo { flex: 1; }
-.itemName { font-weight: 600; font-size: 14px; margin: 0 0 4px; }
-.itemSize { font-size: 12px; color: #666; margin: 0; }
-.itemPrice { font-weight: 600; font-size: 14px; }
-
-/* Etiqueta de descuento/interés en el resumen */
+/* Etiqueta de descuento en el resumen */
 .discountTag {
   font-size: 11px;
-  color: #2ecc71; /* Verde */
+  color: #000; /* CAMBIO: De verde a negro */
   font-weight: 700;
   display: block;
   margin-top: 4px;
 }
 
-.totals {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #e6e6e6;
-}
-
 .totalLine { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #555; }
-.grandTotal { font-size: 18px; font-weight: 800; color: #000; margin-top: 15px; align-items: center; }
+.grandTotal { font-size: 18px; font-weight: 800; color: #000; margin-top: 15px; }
 
 @media (max-width: 900px) {
   .checkoutPage { grid-template-columns: 1fr; }

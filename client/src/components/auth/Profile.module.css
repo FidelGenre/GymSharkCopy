@@ -1,20 +1,33 @@
+/* =========================================
+   1. LAYOUT PRINCIPAL (CORREGIDO)
+   ========================================= */
 .profileContainer {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
+  /* 1. Ancho máximo: Esto controla que no se estire demasiado */
+  max-width: 1200px; 
+  
+  /* 2. Ancho: Ocupa el 90% de la pantalla (deja aire a los lados) */
+  width: 90%; 
+
+  /* 3. Margen: 40px arriba/abajo, AUTO a los lados (Esto lo centra perfecto) */
+  margin: 40px auto; 
+  
+  padding: 0;
   display: flex;
   gap: 40px;
   min-height: 70vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
 }
 
-/* SIDEBAR (Idéntico a Orders para consistencia) */
+/* =========================================
+   2. SIDEBAR (Barra Lateral)
+   ========================================= */
 .sidebar {
   width: 300px;
+  flex-shrink: 0; /* No permitimos que se achique */
   display: flex;
   flex-direction: column;
   gap: 30px;
-  flex-shrink: 0;
 }
 
 .userInfo {
@@ -38,233 +51,175 @@
   margin: 0 auto 15px;
 }
 
-.userInfo h3 {
-  font-size: 18px;
-  font-weight: 900;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
+.userInfo h3 { font-size: 18px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
+.userInfo p { font-size: 14px; color: #767676; }
 
-.userInfo p {
-  font-size: 14px;
-  color: #767676;
-}
-
-.sideNav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.sideNav { display: flex; flex-direction: column; gap: 10px; }
 
 .sideNav button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px;
-  background: none;
-  border: none;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  text-align: left;
-  border-radius: 4px;
-  transition: 0.2s;
-  width: 100%;
+  display: flex; align-items: center; gap: 12px; padding: 15px;
+  background: none; border: none; font-weight: 800; font-size: 13px;
+  cursor: pointer; text-align: left; border-radius: 4px; transition: 0.2s; width: 100%;
 }
+.sideNav button:hover { background: #f9f9f9; }
+.activeTab { background: #000 !important; color: #fff !important; }
+.logoutBtn { color: #ff4444; margin-top: 20px; border-top: 1px solid #eee !important; border-radius: 0 !important; }
 
-.sideNav button:hover {
-  background: #f9f9f9;
-}
-
-.activeTab {
-  background: #000 !important;
-  color: #fff !important;
-}
-
-.logoutBtn {
-  color: #ff4444;
-  margin-top: 20px;
-  border-top: 1px solid #eee !important;
-  border-radius: 0 !important;
-}
-
-/* --- CONTENIDO PRINCIPAL --- */
+/* =========================================
+   3. CONTENIDO DERECHO (IMPORTANTE)
+   ========================================= */
 .content {
-  flex: 1;
+  flex: 1; /* Ocupa todo el espacio restante */
+  /* 🟢 CLAVE: width 100% para forzar que sea igual en ambas páginas */
+  width: 100%; 
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 40px;
+  min-width: 0; /* Evita desbordes */
 }
 
-/* Tarjetas de Sección (Formularios) */
-.cardSection {
+.pageTitle {
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: left;
+  letter-spacing: -0.5px;
+}
+
+/* =========================================
+   4. TARJETAS (Orders y Profile IGUALES)
+   ========================================= */
+
+/* Base de tarjeta unificada */
+.cardSection, .orderCard {
+  width: 100%; /* 🟢 Fuerza ancho total */
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  box-sizing: border-box;
 }
 
+/* Header */
 .cardHeader {
-  padding: 25px;
+  background: #fafafa;
+  padding: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #f0f0f0;
-  background-color: #fafafa;
-}
-
-.sectionTitle {
-  font-size: 18px;
-  font-weight: 900;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
-
-.sectionSubtitle {
-  font-size: 13px;
-  color: #666;
-}
-
-/* Formularios */
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  padding: 25px;
-}
-
-.securityForm {
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.rowTwo {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.inputGroup label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #333;
-  text-transform: uppercase;
-}
-
-.inputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.icon {
-  position: absolute;
-  left: 12px;
-  color: #999;
-  pointer-events: none;
-}
-
-.inputWrapper input {
   width: 100%;
-  padding: 12px 12px 12px 40px; /* Espacio para el icono */
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border 0.2s;
+  box-sizing: border-box;
 }
 
-.inputWrapper input:focus {
-  outline: none;
-  border-color: #000;
+/* Cuerpo */
+.cardBody, .formGrid, .securityForm {
+  padding: 40px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.disabledInput {
-  background-color: #f5f5f5;
-  color: #888;
-  cursor: not-allowed;
-}
+/* Títulos */
+.sectionTitle { font-size: 18px; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
+.sectionSubtitle { font-size: 13px; color: #666; }
 
-/* Botones */
-.formFooter {
-  grid-column: 1 / -1;
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-end;
-}
+/* =========================================
+   5. PEDIDOS (ORDERS) - DETALLE
+   ========================================= */
+.ordersList { width: 100%; display: flex; flex-direction: column; gap: 40px; }
+.headerInfo { display: flex; flex-direction: column; gap: 8px; }
+.orderLabel { font-size: 11px; font-weight: 800; color: #767676; text-transform: uppercase; display: block; }
+.orderId { font-weight: 900; font-size: 16px; }
 
-.saveBtn {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 4px;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.2s;
-}
+.orderStatus { background: #000; color: #fff; padding: 10px 20px; font-size: 12px; font-weight: 800; border-radius: 4px; text-transform: uppercase; }
+.delivered { background: #000; }
+.pending { background: #767676; }
 
-.saveBtn:hover {
-  background: #333;
-}
+/* Cuerpo Orders */
+.cardBody { display: flex; flex-direction: column; gap: 30px; }
 
-.outlineBtn {
-  background: transparent;
-  color: #000;
-  border: 2px solid #000;
-  padding: 12px 25px;
-  border-radius: 4px;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
-  transition: 0.2s;
+.orderMeta {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 30px; 
+  font-size: 14px; font-weight: 600; color: #545454; 
+  padding-bottom: 30px; border-bottom: 1px solid #f0f0f0; width: 100%;
 }
+.deliveryInfo { display: flex; align-items: center; gap: 8px; background-color: #f0fff4; color: #166534; padding: 8px 16px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+.metaDate { display: flex; align-items: center; gap: 8px; }
 
-.outlineBtn:hover {
-  background: #000;
-  color: #fff;
-}
+.productList { width: 100%; }
+.productItem { font-size: 15px; font-weight: 700; margin: 15px 0; display: flex; align-items: center; gap: 15px; color: #111; }
 
-/* Alertas */
-.alert {
-  padding: 15px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 600;
-}
+.footerRow { border-top: 1px solid #f0f0f0; padding-top: 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.orderTotal { display: flex; flex-direction: column; gap: 5px; }
+.totalLabel { display: block; font-size: 12px; font-weight: 800; color: #767676; text-transform: uppercase; }
+.totalAmount { font-size: 24px; font-weight: 900; }
 
-.success {
-  background-color: #e6ffed;
-  color: #22c55e;
-  border: 1px solid #b7ebc7;
-}
+.detailsBtn { background: transparent; color: #000; border: 2px solid #000; padding: 15px 30px; border-radius: 4px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+.detailsBtn:hover { background: #000; color: #fff; text-decoration: none; }
 
-.error {
-  background-color: #ffe6e6;
-  color: #d32f2f;
-  border: 1px solid #fadbd8;
-}
+.emptyContainer { text-align: center; padding: 80px 40px; display: flex; flex-direction: column; align-items: center; gap: 30px; color: #767676; border: 2px dashed #eee; border-radius: 8px; background: #fafafa; width: 100%; }
+.empty { font-weight: 800; font-size: 18px; text-transform: uppercase; color: #333; }
+.shopBtn { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 4px; font-weight: 800; font-size: 14px; cursor: pointer; text-transform: uppercase; transition: opacity 0.2s; }
 
-/* RESPONSIVE */
+/* =========================================
+   6. PERFIL (FORMS) - DETALLE
+   ========================================= */
+.formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 40px; }
+.securityForm { display: flex; flex-direction: column; gap: 30px; padding: 40px; width: 100%; }
+.rowTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; }
+
+.inputGroup { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.inputGroup label { font-size: 12px; font-weight: 700; color: #333; text-transform: uppercase; }
+.inputWrapper { position: relative; display: flex; align-items: center; width: 100%; }
+.icon { position: absolute; left: 15px; color: #999; pointer-events: none; }
+.inputWrapper input { width: 100%; padding: 16px 16px 16px 45px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; transition: border 0.2s; box-sizing: border-box; }
+.inputWrapper input:focus { outline: none; border-color: #000; }
+.disabledInput { background-color: #f5f5f5; color: #888; cursor: not-allowed; }
+
+.formFooter { grid-column: 1 / -1; margin-top: 15px; display: flex; justify-content: flex-end; width: 100%; }
+.saveBtn { background: #000; color: #fff; border: none; padding: 15px 30px; border-radius: 4px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
+.saveBtn:hover { background: #333; }
+.outlineBtn { background: transparent; color: #000; border: 2px solid #000; padding: 15px 30px; border-radius: 4px; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; }
+.outlineBtn:hover { background: #000; color: #fff; }
+
+.alert { padding: 20px; border-radius: 4px; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; width: 100%; box-sizing: border-box; }
+.success { background-color: #e6ffed; color: #22c55e; border: 1px solid #b7ebc7; }
+.error { background-color: #ffe6e6; color: #d32f2f; border: 1px solid #fadbd8; }
+
+/* =========================================
+   7. RESPONSIVE (MÓVIL ARREGLADO)
+   ========================================= */
 @media (max-width: 900px) {
   .profileContainer {
+    /* 1. Cambiamos a columna (uno arriba del otro) */
     flex-direction: column;
+    
+    /* 2. ARREGLO FUNDAMENTAL: Quitamos los márgenes laterales grandes */
+    margin: 20px auto; 
+    
+    /* 3. Ocupa casi todo el ancho del celular */
+    width: 95%; 
+    padding: 0 10px;
+    gap: 30px;
   }
+
   .sidebar {
     width: 100%;
   }
+
+  .pageTitle {
+    text-align: center;
+    font-size: 24px;
+  }
+
+  /* Las grids de 2 columnas pasan a 1 */
   .formGrid, .rowTwo {
     grid-template-columns: 1fr;
+  }
+  
+  /* Padding más pequeño para celular */
+  .cardHeader, .cardBody, .formGrid, .securityForm {
+    padding: 20px;
   }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import styles from './Orders.module.css';
+import styles from './Profile.module.css';
 import { Package, Tag, Clock, User, LogOut, Truck } from 'lucide-react';
 
 const Orders: React.FC = () => {
