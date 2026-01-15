@@ -16,7 +16,9 @@
   overflow: hidden;
   display: block;
   position: relative;
-  z-index: 1001;
+  
+  /* 🟢 CORRECCIÓN: Bajamos el nivel (antes 1001) para que el menú lo tape */
+  z-index: 900;
 }
 
 .announcementBarText {
