@@ -62,7 +62,13 @@
   cursor: pointer; text-align: left; border-radius: 4px; transition: 0.2s; width: 100%;
 }
 .sideNav button:hover { background: #f9f9f9; }
-.activeTab { background: #000 !important; color: #fff !important; }
+
+/* 🟢 CORRECCIÓN: Aseguramos que el botón activo sea NEGRO, no azul */
+.activeTab {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
 .logoutBtn { color: #ff4444; margin-top: 20px; border-top: 1px solid #eee !important; border-radius: 0 !important; }
 
 /* =========================================

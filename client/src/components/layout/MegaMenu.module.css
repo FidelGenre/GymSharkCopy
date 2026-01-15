@@ -94,6 +94,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* 🟢 CAMBIO: Color negro para la X */
+  color: #000; 
 }
 
 .mobileContent {
