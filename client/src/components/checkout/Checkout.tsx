@@ -203,11 +203,25 @@ const Checkout: React.FC = () => {
             }))
         };
 
-        await axios.post('https://gymsharkcopyserver.onrender.com/api/orders', orderData);
+        // Guardamos la respuesta de la orden para intentar sacar el ID real
+        const orderRes = await axios.post('https://gymsharkcopyserver.onrender.com/api/orders', orderData);
         
-        alert("¡Compra realizada con éxito!");
+        // Obtenemos un ID (del backend si existe, o generamos uno basado en fecha)
+        // 'any' para evitar error de TS si no tienes tipada la respuesta del backend
+        const orderId = (orderRes.data as any)?.id || `ORD-${Date.now()}`;
+
         clearCart();
-        navigate('/orders'); 
+        
+        // 🔥 CAMBIO CLAVE AQUÍ: Redirigimos a Thank You Page con los datos para Google Ads
+        navigate('/thank-you', { 
+            state: { 
+                purchaseData: {
+                    total: totalToPay,
+                    id: orderId,
+                    items: cartItems
+                }
+            } 
+        });
       }
     } catch (error) {
       console.error(error);

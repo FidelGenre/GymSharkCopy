@@ -9,7 +9,7 @@ import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import CartDrawer from './components/cart/CartDrawer';
-import AnnouncementBar from './components/layout/AnnouncementBar'; // Componente importado
+import AnnouncementBar from './components/layout/AnnouncementBar';
 
 // 3. Componentes de Página
 import Hero from './components/home/Hero';
@@ -18,6 +18,7 @@ import ProductDetail from './components/products/ProductDetail';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Checkout from './components/checkout/Checkout';
+import ThankYouPage from './components/checkout/ThankYouPage'; // <--- NUEVO IMPORT
 import Orders from './components/auth/Orders';
 import Profile from './components/auth/Profile';
 
@@ -27,7 +28,7 @@ const AppContent: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Detectamos si estamos en checkout
+  // Detectamos si estamos en checkout para ocultar menú/footer
   const isCheckoutPage = location.pathname === '/checkout';
 
   // URL del logo
@@ -76,9 +77,16 @@ const AppContent: React.FC = () => {
         <Route path="/" element={<main><Hero /></main>} />
         <Route path="/category/:gender/:subCategory" element={<CategoryPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        
+        {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
+        {/* Checkout Flow */}
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/thank-you" element={<ThankYouPage />} /> {/* <--- NUEVA RUTA */}
+        
+        {/* User Account */}
         <Route path="/orders" element={<Orders />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
